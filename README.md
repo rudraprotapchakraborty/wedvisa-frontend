@@ -11,7 +11,7 @@ Premium marketing landing page for **WedVisa** — an AI-powered wedding visa pl
 - Framer Motion
 - shadcn-style UI primitives (Radix + CVA)
 - Lucide React
-- `next/font` (Inter + Playfair Display)
+- `next/font` (Inter + Fraunces)
 
 ## Getting started
 

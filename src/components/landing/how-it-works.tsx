@@ -1,59 +1,148 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { howItWorksSteps } from "@/lib/data";
+import {
+  CalendarRange,
+  ClipboardList,
+  Store,
+  Image,
+} from "lucide-react";
 import {
   AnimatedSection,
-  SectionHeading,
+  FadeIn,
   StaggerItem,
 } from "@/components/landing/animated-section";
 
+const steps = [
+  {
+    step: "01",
+    title: "Create your event",
+    description: "Set your date, budget and guest count. Your personal planner is ready instantly.",
+    icon: CalendarRange,
+  },
+  {
+    step: "02",
+    title: "Plan in one place",
+    description: "Budget, checklist, guest list, timeline and seating – all connected, always in sync.",
+    icon: ClipboardList,
+  },
+  {
+    step: "03",
+    title: "Find your suppliers",
+    description: "Browse UK photographers, venues, caterers and florists and enquire directly.",
+    icon: Store,
+  },
+  {
+    step: "04",
+    title: "Celebrate & remember",
+    description: "A private gallery your guests can add to – then plan the next milestone too.",
+    icon: Image,
+  },
+];
+
 export function HowItWorks() {
   return (
-    <AnimatedSection
-      id="how-it-works"
-      className="relative bg-transparent px-4 py-24 sm:px-6 md:py-32 lg:px-8"
-    >
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="How it works"
-          title="Three elegant steps to clarity"
-          description="A refined path from first question to submission-ready—designed for couples who want confidence, not chaos."
-        />
+    <div className="relative w-full bg-[#faf6f0] overflow-hidden">
+      {/* Background floral decoration matching the left edge */}
+      <div 
+        className="absolute top-0 bottom-0 left-0 w-[20%] pointer-events-none opacity-20 select-none bg-contain bg-left bg-no-repeat"
+        style={{ backgroundImage: "url('/watercolor-floral-bg.jpg')" }}
+      />
 
-        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
-          {howItWorksSteps.map((step) => {
-            const Icon = step.icon;
+      <AnimatedSection
+        id="how-it-works"
+        className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32 lg:px-8 z-10"
+      >
+        {/* Top Section: Header & Image */}
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+          {/* Left Column: Heading & Text */}
+          <div className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+            {/* Eyebrow: HOW IT WORKS */}
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#d04b19]">
+              How It Works
+            </p>
+
+            {/* Separator Line with Heart */}
+            <div className="flex items-center w-full max-w-[140px] my-3.5 gap-3">
+              <div className="h-[1px] bg-[#dfd2c4] flex-grow" />
+              <span className="text-[#e85a23] text-xs leading-none">♡</span>
+              <div className="h-[1px] bg-[#dfd2c4] flex-grow" />
+            </div>
+
+            {/* Main Title */}
+            <h2 className="mt-2 font-serif text-4xl sm:text-5xl lg:text-[46px] lg:leading-[1.15] font-medium text-[#1c1613]">
+              From &ldquo;yes&rdquo; to &ldquo;I do&rdquo;, <br className="hidden sm:inline" />
+              <span className="text-[#e85a23] italic font-serif">perfectly organised.</span>
+            </h2>
+
+            {/* Subtext */}
+            <p className="mt-6 text-sm sm:text-base leading-relaxed text-slate-600 font-normal max-w-md">
+              One free account holds every part of your wedding &mdash; <br className="hidden md:inline" />
+              and any celebration that comes after it.
+            </p>
+          </div>
+
+          {/* Right Column: Image */}
+          <div className="lg:col-span-6 flex justify-center">
+            <FadeIn direction="right" className="relative w-full max-w-[500px] aspect-[4/3] rounded-[24px] overflow-hidden shadow-md shadow-slate-900/5 border border-[#dfd2c4]/55 bg-[#f6efe7]">
+              <img
+                src="/wedding-planning-couple.jpg"
+                alt="Couple planning wedding together"
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </FadeIn>
+          </div>
+        </div>
+
+        {/* Middle Section: Cards Flow */}
+        <div className="mt-20 lg:mt-24 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6 max-w-6xl mx-auto">
+          {steps.map((step, idx) => {
+            const IconComponent = step.icon;
             return (
-              <StaggerItem key={step.step}>
-                <motion.article
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="group relative h-full overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm shadow-slate-900/5 transition-shadow duration-300 hover:shadow-xl hover:shadow-violet-600/10 md:p-10"
-                >
-                  <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-violet-500/5 transition-transform duration-500 group-hover:scale-150" />
-                  <div className="relative">
-                    <div className="mb-6 flex items-center justify-between">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg shadow-violet-600/25 transition-transform duration-300 group-hover:scale-110">
-                        <Icon className="h-7 w-7" strokeWidth={1.5} />
-                      </div>
-                      <span className="font-serif text-4xl font-medium text-slate-100 transition-colors duration-300 group-hover:text-violet-100">
-                        0{step.step}
-                      </span>
+              <div key={step.step} className="relative h-full">
+                <StaggerItem className="h-full">
+                  <div className="relative flex flex-col items-center bg-white rounded-[24px] border border-[#f2eae1] p-6 pt-10 text-center shadow-[0_4px_16px_-4px_rgba(28,22,19,0.02)] h-full">
+                    {/* Floating number badge */}
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white border border-[#f2eae1] text-xs font-semibold text-[#d04b19] shadow-xs">
+                      {step.step}
                     </div>
-                    <h3 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
+
+                    {/* Icon container */}
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#f2eae1] text-[#e85a23] bg-[#faf6f0]/50">
+                      <IconComponent className="h-5 w-5 stroke-[1.75]" />
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="mt-4 font-serif text-[17px] font-semibold text-[#1c1613]">
                       {step.title}
                     </h3>
-                    <p className="mt-3 text-base leading-relaxed text-slate-600">
+
+                    {/* Description */}
+                    <p className="mt-2.5 text-[12.5px] leading-relaxed text-slate-500 font-normal">
                       {step.description}
                     </p>
                   </div>
-                </motion.article>
-              </StaggerItem>
+                </StaggerItem>
+
+                {/* Connecting Line and Dot between steps */}
+                {idx < 3 && (
+                  <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-4 w-8 items-center justify-center z-20 pointer-events-none">
+                    <div className="w-8 h-[1px] bg-[#f2eae1]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#e85a23] absolute" />
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
-      </div>
-    </AnimatedSection>
+
+        {/* Bottom Section: Cursive Slogan */}
+        <FadeIn delay={0.2} className="mt-16 sm:mt-20 text-center">
+          <p className="font-script text-[32px] sm:text-[38px] text-[#e85a23] tracking-wide leading-none">
+            Organise everything. Enjoy every moment. ♡
+          </p>
+        </FadeIn>
+      </AnimatedSection>
+    </div>
   );
 }

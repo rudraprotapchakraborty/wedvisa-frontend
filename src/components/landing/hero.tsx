@@ -46,7 +46,7 @@ export function Hero() {
                 asChild
                 className="h-12 px-6 rounded-full bg-[#e85a23] text-white hover:bg-[#d04b19] font-medium shadow-md shadow-[#e85a23]/10 min-w-[200px]"
               >
-                <Link href="/register">
+                <Link href="/?auth=register">
                   <Play className="mr-2 h-3.5 w-3.5 fill-white text-white" />
                   Start planning free
                 </Link>

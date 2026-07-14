@@ -12,7 +12,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
-  --font-serif: var(--font-playfair);
+  --font-serif: var(--font-fraunces);
   --animate-accordion-down: accordion-down 0.3s ease-out;
   --animate-accordion-up: accordion-up 0.3s ease-out;
 
@@ -113,8 +113,12 @@ body {
 }
 
 .font-serif {
-  font-family: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman",
+  font-family: var(--font-fraunces), ui-serif, Georgia, Cambria, "Times New Roman",
     Times, serif;
+}
+
+.font-script {
+  font-family: var(--font-alex-brush), cursive;
 }
 
 ::selection {

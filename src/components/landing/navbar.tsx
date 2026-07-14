@@ -6,9 +6,16 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "../../../public/logo.png";
 import { Button } from "@/components/ui/button";
+import { AuthModal } from "@/components/auth/auth-modal";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -16,6 +23,26 @@ export function Navbar() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  useEffect(() => {
+    const auth = searchParams.get("auth");
+    if (auth === "login") {
+      setActiveTab("signin");
+      setAuthOpen(true);
+    } else if (auth === "register") {
+      setActiveTab("signup");
+      setAuthOpen(true);
+    }
+  }, [searchParams]);
+
+  const handleClose = () => {
+    setAuthOpen(false);
+    // Clean up query param from URL
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("auth");
+    const qs = params.toString();
+    router.replace(qs ? `/?${qs}` : "/", { scroll: false });
+  };
 
   const navLinks = [
     { label: "How it works", href: "#how-it-works" },
@@ -60,12 +87,15 @@ export function Navbar() {
 
         {/* Right Actions (Desktop) */}
         <div className="hidden lg:flex items-center gap-4.5">
-          <Link
-            href="/login"
-            className="text-[14px] font-semibold text-slate-700 hover:text-[#000000] transition-colors duration-200 px-3 py-2"
+          <button
+            onClick={() => {
+              setActiveTab("signin");
+              setAuthOpen(true);
+            }}
+            className="text-[14px] font-semibold text-slate-700 hover:text-[#000000] transition-colors duration-200 px-3 py-2 cursor-pointer"
           >
             Sign in
-          </Link>
+          </button>
           <Button
             asChild
             className="h-10 px-5 rounded-full border border-slate-300 bg-transparent text-[#000000] hover:bg-slate-100/50 font-semibold text-xs"
@@ -73,10 +103,13 @@ export function Navbar() {
             <Link href="/register">Become a supplier</Link>
           </Button>
           <Button
-            asChild
-            className="h-10 px-5 rounded-full bg-[#e85a23] text-white hover:bg-[#d04b19] font-semibold text-xs shadow-sm shadow-[#e85a23]/10"
+            onClick={() => {
+              setActiveTab("signup");
+              setAuthOpen(true);
+            }}
+            className="h-10 px-5 rounded-full bg-[#e85a23] text-white hover:bg-[#d04b19] font-semibold text-xs shadow-sm shadow-[#e85a23]/10 cursor-pointer"
           >
-            <Link href="/register">Start planning free</Link>
+            Start planning free
           </Button>
         </div>
 
@@ -106,27 +139,44 @@ export function Navbar() {
               </Link>
             ))}
             <div className="flex flex-col gap-3 mt-6">
-              <Link
-                href="/login"
-                className="text-center font-semibold text-slate-700 hover:text-[#e85a23] py-3 rounded-full border border-slate-300"
-                onClick={() => setMobileOpen(false)}
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  setActiveTab("signin");
+                  setAuthOpen(true);
+                }}
+                className="text-center font-semibold text-slate-700 hover:text-[#e85a23] py-3 rounded-full border border-slate-300 cursor-pointer"
               >
                 Sign in
-              </Link>
+              </button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link href="/register" onClick={() => setMobileOpen(false)}>
                   Become a supplier
                 </Link>
               </Button>
-              <Button asChild size="lg" className="rounded-full bg-[#e85a23] hover:bg-[#d04b19]">
-                <Link href="/register" onClick={() => setMobileOpen(false)}>
-                  Start planning free
-                </Link>
+              <Button
+                size="lg"
+                className="rounded-full bg-[#e85a23] hover:bg-[#d04b19] cursor-pointer"
+                onClick={() => {
+                  setMobileOpen(false);
+                  setActiveTab("signup");
+                  setAuthOpen(true);
+                }}
+              >
+                Start planning free
               </Button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Auth Popup Modal */}
+      <AuthModal
+        isOpen={authOpen}
+        onClose={handleClose}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
     </header>
   );
 }
