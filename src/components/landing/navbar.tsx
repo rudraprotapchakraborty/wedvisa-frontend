@@ -1,31 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { navLinks } from "@/lib/data";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { MegaMenu } from "@/components/landing/mega-menu";
-
 import Image from "next/image";
 import logo from "../../../public/logo.png";
+import { Button } from "@/components/ui/button";
 
 export function Navbar() {
-  const pathname = usePathname();
-  const isHome = pathname === "/";
-  const [scrolled, setScrolled] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -34,122 +17,73 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
-  // Transparent white nav only over the home hero; solid elsewhere
-  const isLight = !isHome || scrolled || servicesOpen || mobileOpen;
+  const navLinks = [
+    { label: "How it works", href: "#how-it-works" },
+    { label: "Find suppliers", href: "#suppliers" },
+    { label: "Free tools", href: "#tools" },
+    { label: "Inspiration", href: "#inspiration" },
+  ];
 
   return (
-    <header
-      className={cn(
-        "w-full transition-all duration-500",
-        isLight
-          ? "border-b border-slate-200/60 bg-white/80 shadow-lg shadow-slate-900/5 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
-      )}
-      onMouseLeave={() => setServicesOpen(false)}
-    >
-      <nav className="relative mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200/50 shadow-md shadow-slate-900/5 transition-transform duration-300 group-hover:scale-105 overflow-hidden">
+    <header className="w-full bg-[#f6efe7] border-b border-[#dfd2c4]/50 shadow-sm shadow-slate-900/[0.02]">
+      <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 select-none group">
+          <div className="relative h-8 w-8 overflow-hidden transition-transform duration-300 group-hover:scale-105">
             <Image
               src={logo}
               alt="WedVisa Logo"
               fill
-              sizes="36px"
-              className="object-cover"
+              sizes="32px"
+              className="object-contain"
               priority
             />
-          </span>
-          <span
-            className={cn(
-              "text-lg font-semibold tracking-tight transition-colors duration-300",
-              isLight ? "text-slate-900" : "text-white"
-            )}
-          >
-            WedVisa
+          </div>
+          <span className="text-xl font-bold tracking-tight text-[#000000] font-sans">
+            wed<span className="text-[#e85a23]">visa</span>
           </span>
         </Link>
 
-        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
-          {navLinks.map((link) => {
-            if (link.hasDropdown && link.label === "Services") {
-              return (
-                <button
-                  key={link.label}
-                  type="button"
-                  className={cn(
-                    "flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-300",
-                    isLight
-                      ? "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                      : "text-white hover:bg-white/10 hover:text-white",
-                    servicesOpen && "bg-slate-100 text-slate-900"
-                  )}
-                  onMouseEnter={() => setServicesOpen(true)}
-                  onFocus={() => setServicesOpen(true)}
-                  aria-expanded={servicesOpen}
-                >
-                  {link.label}
-                  <ChevronDown
-                    className={cn(
-                      "h-3.5 w-3.5 transition-transform duration-300",
-                      servicesOpen && "rotate-180"
-                    )}
-                  />
-                </button>
-              );
-            }
-
-            const isActive =
-              link.href === "/blog"
-                ? pathname.startsWith("/blog")
-                : pathname === link.href;
-
-            return (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={cn(
-                  "flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-300",
-                  isLight
-                    ? "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                    : "text-white hover:bg-white/10 hover:text-white",
-                  isActive && isLight && "bg-violet-50 text-violet-700"
-                )}
-                onMouseEnter={() => setServicesOpen(false)}
-              >
-                {link.label}
-                {link.hasDropdown ? (
-                  <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                ) : null}
-              </Link>
-            );
-          })}
+        {/* Center Links (Desktop) */}
+        <div className="hidden lg:flex items-center gap-7">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="text-[14px] font-medium text-slate-700 hover:text-[#000000] transition-colors duration-200"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        {/* Right Actions (Desktop) */}
+        <div className="hidden lg:flex items-center gap-4.5">
           <Link
             href="/login"
-            className={cn(
-              "rounded-full px-4 py-2 text-sm font-medium transition-all duration-300",
-              isLight
-                ? "text-slate-700 hover:bg-slate-100"
-                : "text-white hover:bg-white/10"
-            )}
+            className="text-[14px] font-semibold text-slate-700 hover:text-[#000000] transition-colors duration-200 px-3 py-2"
           >
-            Log In
+            Sign in
           </Link>
-          <Button asChild size="default" variant="gradient">
-            <Link href="/register">Start Free</Link>
+          <Button
+            asChild
+            className="h-10 px-5 rounded-full border border-slate-300 bg-transparent text-[#000000] hover:bg-slate-100/50 font-semibold text-xs"
+          >
+            <Link href="/register">Become a supplier</Link>
+          </Button>
+          <Button
+            asChild
+            className="h-10 px-5 rounded-full bg-[#e85a23] text-white hover:bg-[#d04b19] font-semibold text-xs shadow-sm shadow-[#e85a23]/10"
+          >
+            <Link href="/register">Start planning free</Link>
           </Button>
         </div>
 
+        {/* Mobile menu button */}
         <button
           type="button"
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-full transition-colors lg:hidden",
-            isLight
-              ? "text-slate-900 hover:bg-slate-100"
-              : "text-white hover:bg-white/10"
-          )}
+          className="flex h-10 w-10 items-center justify-center rounded-full text-slate-700 hover:bg-slate-100 lg:hidden"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
@@ -157,46 +91,42 @@ export function Navbar() {
         </button>
       </nav>
 
-      <div className="hidden lg:block">
-        <MegaMenu open={servicesOpen} onClose={() => setServicesOpen(false)} />
-      </div>
-
-      <AnimatePresence>
-        {mobileOpen ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-slate-100 bg-white lg:hidden"
-          >
-            <div className="flex max-h-[calc(100dvh-7.5rem)] flex-col gap-1 overflow-y-auto px-4 py-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="rounded-xl px-4 py-3 text-base font-medium text-slate-800 hover:bg-violet-50 hover:text-violet-700"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
+      {/* Mobile menu panel */}
+      {mobileOpen && (
+        <div className="fixed inset-0 top-[72px] z-40 w-full bg-[#f6efe7] border-t border-[#dfd2c4]/50 lg:hidden">
+          <div className="flex flex-col gap-4 px-6 py-6 h-full overflow-y-auto">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-base font-semibold text-slate-800 hover:text-[#e85a23] py-2 border-b border-[#dfd2c4]/20"
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="flex flex-col gap-3 mt-6">
+              <Link
+                href="/login"
+                className="text-center font-semibold text-slate-700 hover:text-[#e85a23] py-3 rounded-full border border-slate-300"
+                onClick={() => setMobileOpen(false)}
+              >
+                Sign in
+              </Link>
+              <Button asChild variant="outline" size="lg" className="rounded-full">
+                <Link href="/register" onClick={() => setMobileOpen(false)}>
+                  Become a supplier
                 </Link>
-              ))}
-              <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 pt-4">
-                <Button asChild variant="outlineDark" size="lg">
-                  <Link href="/login" onClick={() => setMobileOpen(false)}>
-                    Log In
-                  </Link>
-                </Button>
-                <Button asChild variant="gradient" size="lg">
-                  <Link href="/register" onClick={() => setMobileOpen(false)}>
-                    Start Free
-                  </Link>
-                </Button>
-              </div>
+              </Button>
+              <Button asChild size="lg" className="rounded-full bg-[#e85a23] hover:bg-[#d04b19]">
+                <Link href="/register" onClick={() => setMobileOpen(false)}>
+                  Start planning free
+                </Link>
+              </Button>
             </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

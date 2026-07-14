@@ -1,152 +1,244 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Lock, Shield, Sparkles, Star } from "lucide-react";
-import Link from "next/link";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { Check, Download, FileText, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const trustItems = [
-  { label: "Private", icon: Lock },
-  { label: "Secure", icon: Shield },
-  { label: "AI Powered", icon: Sparkles },
-];
+import Link from "next/link";
 
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.35]);
-
   return (
-    <section
-      ref={ref}
-      className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
-    >
-      <motion.div style={{ y }} className="absolute inset-0">
-        {/* Ambient premium fallback if video is unavailable */}
-        <div className="absolute inset-0 bg-slate-950" />
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-violet-600/30 blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-fuchsia-600/20 blur-[100px]" />
-        </div>
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        >
-          <source
-            src="https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4"
-            type="video/mp4"
-          />
-        </video>
-        <div className="absolute inset-0 bg-slate-950/55" />
-      </motion.div>
+    <section className="relative min-h-[90svh] w-full bg-[#f6efe7] overflow-hidden pt-28 pb-16 lg:pt-36 lg:pb-24 flex items-center">
+      {/* Blurred background bokeh overlay on the right */}
+      <div className="absolute top-0 right-0 bottom-0 w-full lg:w-[65%] pointer-events-none opacity-20 select-none">
+        <img
+          src="https://images.pexels.com/photos/948185/pexels-photo-948185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          alt="Wedding backdrop"
+          className="h-full w-full object-cover blur-[8px]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f6efe7] via-[#f6efe7]/95 to-transparent" />
+      </div>
 
-      <motion.div
-        style={{ opacity }}
-        className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 pb-28 pt-[8.5rem] text-center sm:px-6 lg:px-8"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm text-white/90 backdrop-blur-md"
-        >
-          <Sparkles className="h-3.5 w-3.5 text-violet-200" />
-          AI-powered wedding visa platform
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 36 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl font-serif text-5xl font-medium leading-[1.08] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[4.5rem]"
-        >
-          Make Your Wedding Visa Journey Effortless.
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-[700px] text-lg leading-relaxed text-white/80 sm:text-xl"
-        >
-          WedVisa guides couples through eligibility, evidence, documents, and
-          interviews—so you can focus on your future together, not the paperwork.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
-        >
-          <Button asChild size="xl" variant="gradient" className="min-w-[220px]">
-            <Link href="/register">
-              Start Your Application
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </Button>
-          <Button asChild size="xl" variant="outline" className="min-w-[180px]">
-            <Link href="#how-it-works">Learn More</Link>
-          </Button>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12 flex flex-col items-center gap-5"
-        >
-          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
-            <div className="flex items-center gap-0.5 text-amber-300">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-current" />
-              ))}
+      <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 z-10">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+          {/* Left Column: Text & Buttons */}
+          <div className="lg:col-span-5 flex flex-col justify-center text-left">
+            {/* Eyebrow badge */}
+            <div className="inline-flex items-center w-fit rounded-full border border-[#e85a23]/30 bg-[#e85a23]/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#e85a23]">
+              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#e85a23]" />
+              The Free UK Wedding Planner
             </div>
-            <p className="text-sm font-medium text-white/85">
-              Trusted by couples worldwide
+
+            {/* Heading */}
+            <h1 className="mt-6 font-serif text-5xl font-medium leading-[1.08] tracking-tight text-[#000000] sm:text-6xl md:text-7.5xl">
+              Plan your wedding <br />
+              without the <span className="text-[#e85a23] italic">chaos.</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-700 sm:text-lg">
+              Budget, guest list, timeline, suppliers — every part of your day in one
+              calm place. Free to use, no account needed to start.
             </p>
+
+            {/* Action Buttons */}
+            <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+              <Button
+                asChild
+                className="h-12 px-6 rounded-full bg-[#e85a23] text-white hover:bg-[#d04b19] font-medium shadow-md shadow-[#e85a23]/10 min-w-[200px]"
+              >
+                <Link href="/register">
+                  <Play className="mr-2 h-3.5 w-3.5 fill-white text-white" />
+                  Start planning free
+                </Link>
+              </Button>
+              <Button
+                asChild
+                className="h-12 px-6 rounded-full border border-slate-300 bg-white/50 backdrop-blur-sm text-[#000000] hover:bg-white/80 font-medium min-w-[170px]"
+              >
+                <Link href="#features">
+                  <Download className="mr-2 h-4 w-4" />
+                  Try the free tools
+                </Link>
+              </Button>
+            </div>
+
+            {/* Sub-label under buttons */}
+            <div className="mt-5 flex items-center gap-2 text-xs font-medium text-slate-500">
+              <span className="text-[#e85a23] font-bold">✓</span>
+              <span>No credit card. No sign-up wall. Start in seconds.</span>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {trustItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <span
-                  key={item.label}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm sm:text-sm"
-                >
-                  <Icon className="h-3.5 w-3.5 text-violet-200" />
-                  {item.label}
-                </span>
-              );
-            })}
-          </div>
-        </motion.div>
-      </motion.div>
+          {/* Right Column: Polaroid Collage & Checklist Card */}
+          <div className="lg:col-span-7 flex justify-center items-center">
+            <div className="relative w-full max-w-[550px] h-[520px] md:h-[580px] flex items-center justify-center select-none">
+              
+              {/* Polaroid 1 (Top Left: Bouquet) */}
+              <div className="absolute top-[3%] left-[8%] w-[130px] md:w-[150px] -rotate-12 bg-white p-2 pb-5 shadow-lg border border-slate-100/50">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src="/1.png"
+                    alt="Wedding"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
 
-      {/* Curved white divider */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 leading-[0]">
-        <svg
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          className="h-16 w-full sm:h-20 md:h-28 text-slate-50"
-          aria-hidden="true"
-        >
-          <path
-            d="M0,64 C240,120 480,120 720,80 C960,40 1200,16 1440,48 L1440,120 L0,120 Z"
-            fill="currentColor"
-          />
-        </svg>
+              {/* Polaroid 2 (Top Right: Arch) */}
+              <div className="absolute top-[1%] right-[10%] w-[120px] md:w-[140px] rotate-12 bg-white p-2 pb-5 shadow-lg border border-slate-100/50">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src="/2.png"
+                    alt="Wedding"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Polaroid 3 (Middle Left: Groom & Bride) */}
+              <div className="absolute top-[28%] left-[2%] w-[140px] md:w-[160px] -rotate-6 bg-white p-2 pb-5 shadow-lg border border-slate-100/50">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src="/3.png"
+                    alt="Wedding"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Polaroid 4 (Middle Right: Candle Table) */}
+              <div className="absolute top-[32%] right-[3%] w-[130px] md:w-[155px] rotate-8 bg-white p-2 pb-5 shadow-lg border border-slate-100/50">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src="/4.png"
+                    alt="Wedding"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Polaroid 5 (Bottom Left: Reception Lights) */}
+              <div className="absolute bottom-[4%] left-[12%] w-[130px] md:w-[150px] rotate-6 bg-white p-2 pb-5 shadow-lg border border-slate-100/50">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src="/1.png"
+                    alt="Wedding"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Polaroid 6 (Bottom Right: Cake) */}
+              <div className="absolute bottom-[3%] right-[12%] w-[120px] md:w-[140px] -rotate-3 bg-white p-2 pb-5 shadow-lg border border-slate-100/50">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src="/2.png"
+                    alt="Wedding"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+              {/* Center Checklist Card */}
+              <div className="relative z-10 w-[290px] md:w-[330px] bg-white rounded-3xl shadow-xl border border-slate-200/50">
+                {/* Header (Black Background) */}
+                <div className="bg-[#1c1613] p-4 text-white flex items-center justify-between rounded-t-3xl">
+                  <div className="flex items-center gap-3">
+                    {/* Circle avatar */}
+                    <div className="h-8.5 w-8.5 rounded-full bg-[#e85a23] flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                      E&J
+                    </div>
+                    <div className="text-left">
+                      <h4 className="font-semibold text-xs leading-none">Emma & Jack</h4>
+                      <p className="text-[9px] text-slate-400 mt-1 leading-none">14 June 2027 – 280 days to go</p>
+                    </div>
+                  </div>
+                  <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[9px] font-semibold text-slate-300">
+                    Wedding day
+                  </span>
+                </div>
+
+                {/* Body (White Background) */}
+                <div className="p-4 flex flex-col gap-3.5 rounded-b-3xl">
+                  {/* Planning Progress Row */}
+                  <div className="flex flex-col gap-1.5 text-left">
+                    <div className="flex justify-between text-[11px] font-semibold">
+                      <span className="text-slate-500">Planning progress</span>
+                      <span className="text-[#e85a23]">62%</span>
+                    </div>
+                    {/* Progress Bar */}
+                    <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                      <div className="h-full w-[62%] rounded-full bg-[#e85a23]" />
+                    </div>
+                  </div>
+
+                  {/* Checklist Items */}
+                  <div className="flex flex-col gap-3">
+                    {/* Item 1 */}
+                    <div className="flex items-center justify-between text-left">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-5 w-5 rounded-full bg-[#4caf50] flex items-center justify-center text-white shrink-0">
+                          <Check className="h-3 w-3 stroke-[3]" />
+                        </div>
+                        <span className="text-[11px] font-medium text-slate-800">Choose your venue</span>
+                      </div>
+                      <span className="text-[9px] font-semibold text-slate-400 shrink-0">Done</span>
+                    </div>
+
+                    {/* Item 2 */}
+                    <div className="flex items-center justify-between text-left">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-5 w-5 rounded-full bg-[#4caf50] flex items-center justify-center text-white shrink-0">
+                          <Check className="h-3 w-3 stroke-[3]" />
+                        </div>
+                        <span className="text-[11px] font-medium text-slate-800">Book photographer</span>
+                      </div>
+                      <span className="text-[9px] font-semibold text-slate-400 shrink-0">Done</span>
+                    </div>
+
+                    {/* Item 3 */}
+                    <div className="flex items-center justify-between text-left">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-5 w-5 rounded-full border border-[#e85a23] flex items-center justify-center shrink-0">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#e85a23]" />
+                        </div>
+                        <span className="text-[11px] font-medium text-slate-800">Confirm caterer</span>
+                      </div>
+                      <span className="text-[9px] font-semibold text-[#e85a23] shrink-0">In progress</span>
+                    </div>
+
+                    {/* Item 4 */}
+                    <div className="flex items-center justify-between text-left">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-5 w-5 rounded-full border border-slate-200 shrink-0" />
+                        <span className="text-[11px] font-medium text-slate-400">Send save-the-dates</span>
+                      </div>
+                    </div>
+
+                    {/* Item 5 */}
+                    <div className="flex items-center justify-between text-left">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-5 w-5 rounded-full border border-slate-200 shrink-0" />
+                        <span className="text-[11px] font-medium text-slate-400">Track guest RSVPs</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tasks Due Floaty Card (Bottom Right, nested absolute inside checklist card to overlap it perfectly) */}
+                <div className="absolute -bottom-6 -right-6 md:-right-8 z-20 bg-white rounded-2xl shadow-xl border border-slate-200/50 p-3.5 flex items-center gap-3 w-[180px] text-left">
+                  <div className="h-9 w-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <h5 className="font-semibold text-xs text-slate-900 truncate">3 tasks due</h5>
+                    <p className="text-[9px] text-slate-400 mt-0.5">this month</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
