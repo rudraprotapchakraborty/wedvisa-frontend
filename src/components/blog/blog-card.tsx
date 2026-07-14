@@ -32,12 +32,11 @@ export function BlogCard({ post, index = 0, featured = false }: BlogCardProps) {
       >
         <div
           className={cn(
-            "relative overflow-hidden bg-gradient-to-br p-6",
+            "relative overflow-hidden p-6",
             post.gradient,
             featured ? "min-h-[200px] md:w-[42%] md:min-h-full" : "min-h-[160px]"
           )}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.22),_transparent_55%)]" />
           <div className="relative flex h-full flex-col justify-between text-white">
             <span className="inline-flex w-fit rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
               {post.category}

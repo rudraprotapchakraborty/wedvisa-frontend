@@ -54,7 +54,7 @@ export function BlogListing() {
         </motion.p>
       )}
 
-      <div className="mt-16 overflow-hidden rounded-3xl bg-gradient-to-br from-violet-700 via-purple-600 to-fuchsia-600 px-6 py-12 text-center text-white sm:px-10">
+      <div className="mt-16 overflow-hidden rounded-3xl bg-violet-700 px-6 py-12 text-center text-white sm:px-10">
         <h2 className="font-serif text-3xl font-medium tracking-tight md:text-4xl">
           Ready to put these guides into action?
         </h2>

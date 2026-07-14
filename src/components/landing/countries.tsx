@@ -14,7 +14,7 @@ export function Countries() {
   return (
     <AnimatedSection
       id="countries"
-      className="bg-white px-4 py-24 sm:px-6 md:py-32 lg:px-8"
+      className="bg-transparent px-4 py-24 sm:px-6 md:py-32 lg:px-8"
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeading
@@ -33,7 +33,7 @@ export function Countries() {
               >
                 <Link
                   href={country.href}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/80 p-7 shadow-sm shadow-slate-900/5 transition-shadow duration-300 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-600/10"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-7 shadow-sm shadow-slate-900/5 transition-shadow duration-300 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-600/10"
                 >
                   <div className="mb-6 flex items-start justify-between">
                     <span

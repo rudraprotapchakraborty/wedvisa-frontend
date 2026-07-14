@@ -12,10 +12,7 @@ export function CtaSection() {
       id="cta"
       className="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32 lg:px-8"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-700 via-purple-600 to-fuchsia-600" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.2),_transparent_50%)]" />
-      <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-fuchsia-400/30 blur-3xl" />
-      <div className="pointer-events-none absolute -right-16 top-10 h-64 w-64 rounded-full bg-violet-300/25 blur-3xl" />
+      <div className="absolute inset-0 bg-slate-900" />
 
       <div className="relative mx-auto max-w-4xl text-center">
         <FadeIn>

@@ -43,32 +43,17 @@ export function FeatureIllustration({
   return (
     <motion.div
       className={cn(
-        "relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gradient-to-br p-8 shadow-xl shadow-slate-900/5 ring-1 ring-slate-200/80",
-        colors.bg,
+        "relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-slate-100 p-8 shadow-xl shadow-slate-900/5 ring-1 ring-slate-200/80",
         className
       )}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div
-        className={cn(
-          "absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl",
-          colors.orb
-        )}
-      />
-      <div
-        className={cn(
-          "absolute -bottom-12 -left-8 h-48 w-48 rounded-full blur-3xl",
-          colors.orb
-        )}
-      />
-
       <div className="relative flex h-full flex-col justify-between">
         <div className="flex items-start justify-between">
           <div
             className={cn(
-              "flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg",
-              colors.icon
+              "flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg"
             )}
           >
             <Icon className="h-8 w-8" strokeWidth={1.5} />

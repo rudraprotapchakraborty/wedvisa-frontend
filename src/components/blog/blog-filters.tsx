@@ -21,7 +21,7 @@ export function BlogFilters({ active, onChange }: BlogFiltersProps) {
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium transition-all duration-300",
               isActive
-                ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md shadow-violet-600/25"
+                ? "bg-violet-600 text-white shadow-md shadow-violet-600/25"
                 : "border border-slate-200 bg-white text-slate-600 hover:border-violet-200 hover:text-violet-700"
             )}
           >

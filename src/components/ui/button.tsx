@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "border border-slate-200 bg-white text-slate-900 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700",
         ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
         gradient:
-          "bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white shadow-lg shadow-violet-600/30 hover:shadow-violet-500/40 hover:scale-[1.02]",
+          "bg-violet-600 text-white shadow-lg shadow-violet-600/25 hover:bg-violet-700 hover:scale-[1.02]",
       },
       size: {
         default: "h-11 px-6 py-2",

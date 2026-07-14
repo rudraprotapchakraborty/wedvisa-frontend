@@ -109,7 +109,7 @@ export function Testimonials() {
                 &ldquo;{item.review}&rdquo;
               </p>
               <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-sm font-semibold text-white shadow-md shadow-violet-600/20">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white shadow-md shadow-violet-600/20">
                   {item.avatar}
                 </div>
                 <div>

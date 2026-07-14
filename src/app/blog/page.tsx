@@ -15,7 +15,6 @@ export default function BlogPage() {
       <SiteHeader />
       <main className="flex-1 bg-slate-50/60">
         <section className="relative overflow-hidden border-b border-slate-200/80 bg-white pt-32 pb-16 sm:pt-36 sm:pb-20">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.08),_transparent_55%)]" />
           <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
               Blog

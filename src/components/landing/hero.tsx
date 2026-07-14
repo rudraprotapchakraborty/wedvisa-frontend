@@ -28,10 +28,10 @@ export function Hero() {
     >
       <motion.div style={{ y }} className="absolute inset-0">
         {/* Ambient premium fallback if video is unavailable */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-950 via-slate-950 to-fuchsia-950" />
+        <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute inset-0 opacity-40">
-          <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-violet-600/40 blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-fuchsia-600/30 blur-[100px]" />
+          <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-violet-600/30 blur-[120px]" />
+          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-fuchsia-600/20 blur-[100px]" />
         </div>
         <video
           className="absolute inset-0 h-full w-full object-cover"
@@ -48,7 +48,6 @@ export function Hero() {
           />
         </video>
         <div className="absolute inset-0 bg-slate-950/55" />
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-950/40 via-transparent to-slate-950/50" />
       </motion.div>
 
       <motion.div
@@ -140,12 +139,12 @@ export function Hero() {
         <svg
           viewBox="0 0 1440 120"
           preserveAspectRatio="none"
-          className="h-16 w-full sm:h-20 md:h-28"
+          className="h-16 w-full sm:h-20 md:h-28 text-slate-50"
           aria-hidden="true"
         >
           <path
             d="M0,64 C240,120 480,120 720,80 C960,40 1200,16 1440,48 L1440,120 L0,120 Z"
-            fill="white"
+            fill="currentColor"
           />
         </svg>
       </div>

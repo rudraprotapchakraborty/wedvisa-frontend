@@ -458,7 +458,7 @@ export const blogPosts: BlogPost[] = [
     publishedAt: "2026-06-28",
     readTime: "8 min read",
     featured: true,
-    gradient: "from-violet-600 via-purple-600 to-fuchsia-600",
+    gradient: "bg-violet-600",
   },
   {
     slug: "uk-spouse-visa-evidence-guide",
@@ -478,7 +478,7 @@ export const blogPosts: BlogPost[] = [
     publishedAt: "2026-06-18",
     readTime: "6 min read",
     featured: true,
-    gradient: "from-indigo-600 via-violet-600 to-purple-600",
+    gradient: "bg-slate-900",
   },
   {
     slug: "how-ai-helps-wedding-visa-prep",
@@ -498,7 +498,7 @@ export const blogPosts: BlogPost[] = [
     authorRole: "Product",
     publishedAt: "2026-06-10",
     readTime: "5 min read",
-    gradient: "from-fuchsia-600 via-purple-600 to-violet-600",
+    gradient: "bg-violet-700",
   },
   {
     slug: "canada-spousal-sponsorship-timeline",
@@ -517,7 +517,7 @@ export const blogPosts: BlogPost[] = [
     authorRole: "Research",
     publishedAt: "2026-05-30",
     readTime: "7 min read",
-    gradient: "from-emerald-600 via-teal-600 to-cyan-600",
+    gradient: "bg-slate-800",
   },
   {
     slug: "relationship-timeline-that-convinces",
@@ -536,7 +536,7 @@ export const blogPosts: BlogPost[] = [
     authorRole: "Immigration Content Lead",
     publishedAt: "2026-05-20",
     readTime: "6 min read",
-    gradient: "from-violet-600 via-indigo-600 to-blue-600",
+    gradient: "bg-violet-600",
   },
   {
     slug: "from-chaos-to-clarity-couple-story",
@@ -555,7 +555,7 @@ export const blogPosts: BlogPost[] = [
     authorRole: "Team",
     publishedAt: "2026-05-08",
     readTime: "4 min read",
-    gradient: "from-rose-500 via-fuchsia-600 to-violet-600",
+    gradient: "bg-slate-900",
   },
 ];
 

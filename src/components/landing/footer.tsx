@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { footerColumns } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import logo from "../../../public/logo.png";
 
 interface SocialLink {
   label: string;
@@ -69,11 +71,15 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] lg:gap-16">
           <div>
-            <Link href="/" className="inline-flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-md shadow-violet-600/30">
-                <span className="font-serif text-lg font-semibold text-white">
-                  W
-                </span>
+            <Link href="/" className="inline-flex items-center gap-2.5 group">
+              <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-800 shadow-md transition-transform duration-300 group-hover:scale-105 overflow-hidden">
+                <Image
+                  src={logo}
+                  alt="WedVisa Logo"
+                  fill
+                  sizes="36px"
+                  className="object-cover"
+                />
               </span>
               <span className="text-lg font-semibold tracking-tight text-white">
                 WedVisa

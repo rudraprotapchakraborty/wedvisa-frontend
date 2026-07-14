@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { CheckCircle2, Shield, Sparkles } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import Image from "next/image";
+import logo from "../../../public/logo.png";
 
 interface AuthShellProps {
   children: ReactNode;
@@ -21,21 +23,21 @@ const highlights = [
 export function AuthShell({ children, title, subtitle, footer }: AuthShellProps) {
   return (
     <div className="relative min-h-full flex-1 bg-slate-50">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-24 top-0 h-80 w-80 rounded-full bg-violet-400/20 blur-3xl" />
-        <div className="absolute -right-20 bottom-10 h-96 w-96 rounded-full bg-fuchsia-400/15 blur-3xl" />
-      </div>
-
       <div className="relative mx-auto grid min-h-[100svh] w-full max-w-7xl lg:grid-cols-2">
         {/* Brand panel */}
-        <div className="relative hidden overflow-hidden bg-gradient-to-br from-violet-700 via-purple-600 to-fuchsia-600 p-10 text-white lg:flex lg:flex-col lg:justify-between lg:p-14">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.2),_transparent_55%)]" />
-          <div className="pointer-events-none absolute -bottom-16 -left-10 h-64 w-64 rounded-full bg-fuchsia-300/25 blur-3xl" />
+        <div className="relative hidden overflow-hidden bg-slate-900 p-10 text-white lg:flex lg:flex-col lg:justify-between lg:p-14">
 
           <div className="relative">
-            <Link href="/" className="inline-flex items-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 shadow-lg backdrop-blur-sm">
-                <span className="font-serif text-xl font-semibold">W</span>
+            <Link href="/" className="inline-flex items-center gap-2.5 group">
+              <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-lg transition-transform duration-300 group-hover:scale-105 overflow-hidden">
+                <Image
+                  src={logo}
+                  alt="WedVisa Logo"
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                  priority
+                />
               </span>
               <span className="text-xl font-semibold tracking-tight">
                 WedVisa
@@ -89,9 +91,16 @@ export function AuthShell({ children, title, subtitle, footer }: AuthShellProps)
         {/* Form panel */}
         <div className="relative flex flex-col justify-center px-4 py-10 sm:px-8 lg:px-12 xl:px-20">
           <div className="mb-8 flex items-center justify-between lg:hidden">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-md">
-                <span className="font-serif text-lg font-semibold">W</span>
+            <Link href="/" className="inline-flex items-center gap-2 group">
+              <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200/50 shadow-md transition-transform duration-300 group-hover:scale-105 overflow-hidden">
+                <Image
+                  src={logo}
+                  alt="WedVisa Logo"
+                  fill
+                  sizes="36px"
+                  className="object-cover"
+                  priority
+                />
               </span>
               <span className="text-lg font-semibold text-slate-900">
                 WedVisa

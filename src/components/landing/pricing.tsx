@@ -16,7 +16,7 @@ export function Pricing() {
   return (
     <AnimatedSection
       id="pricing"
-      className="bg-white px-4 py-24 sm:px-6 md:py-32 lg:px-8"
+      className="bg-transparent px-4 py-24 sm:px-6 md:py-32 lg:px-8"
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeading
@@ -34,12 +34,12 @@ export function Pricing() {
                 className={cn(
                   "relative h-full rounded-3xl",
                   plan.highlighted &&
-                    "bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 p-[2px] shadow-2xl shadow-violet-600/20"
+                    "bg-violet-600 p-[2px] shadow-2xl shadow-violet-600/20"
                 )}
               >
                 {plan.highlighted ? (
                   <div className="absolute -top-3.5 left-1/2 z-10 -translate-x-1/2">
-                    <span className="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-white shadow-lg shadow-violet-600/30">
+                    <span className="rounded-full bg-violet-600 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-white shadow-lg shadow-violet-600/30">
                       Most popular
                     </span>
                   </div>

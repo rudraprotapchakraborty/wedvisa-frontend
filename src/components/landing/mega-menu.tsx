@@ -40,7 +40,7 @@ export function MegaMenu({ open, onClose }: MegaMenuProps) {
                         onClick={onClose}
                         className="group flex gap-4 rounded-2xl p-4 transition-all duration-300 hover:bg-violet-50/80"
                       >
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 text-white shadow-md shadow-violet-600/20 transition-transform duration-300 group-hover:scale-105">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-white shadow-md shadow-violet-600/20 transition-transform duration-300 group-hover:scale-105">
                           <Icon className="h-5 w-5" strokeWidth={1.75} />
                         </div>
                         <div>
@@ -61,12 +61,10 @@ export function MegaMenu({ open, onClose }: MegaMenuProps) {
                 initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.12, duration: 0.4 }}
-                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 p-8 text-white shadow-xl"
+                className="relative overflow-hidden rounded-3xl bg-violet-700 p-8 text-white shadow-xl"
               >
-                <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
-                <div className="pointer-events-none absolute -bottom-10 left-6 h-32 w-32 rounded-full bg-fuchsia-300/30 blur-2xl" />
                 <div className="relative">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
                     <Sparkles className="h-6 w-6" />
                   </div>
                   <h3 className="font-serif text-2xl font-medium leading-snug">

@@ -48,7 +48,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <article>
           <header className="relative overflow-hidden border-b border-slate-200/80 pt-32 pb-14 sm:pt-36 sm:pb-16">
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${post.gradient} opacity-[0.08]`}
+              className={`absolute inset-0 ${post.gradient} opacity-[0.08]`}
             />
             <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
               <Link
@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-slate-200/80 pt-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-sm font-semibold text-white">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white">
                   {post.author
                     .split(" ")
                     .map((part) => part[0])
@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
             <div
-              className={`mb-12 h-48 overflow-hidden rounded-3xl bg-gradient-to-br sm:h-64 ${post.gradient}`}
+              className={`mb-12 h-48 overflow-hidden rounded-3xl sm:h-64 ${post.gradient}`}
             >
               <div className="flex h-full items-end p-8">
                 <p className="max-w-md font-serif text-2xl font-medium text-white/95 sm:text-3xl">

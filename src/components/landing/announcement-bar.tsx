@@ -5,8 +5,7 @@ import { ChevronDown, Search } from "lucide-react";
 
 export function AnnouncementBar() {
   return (
-    <div className="relative h-12 w-full overflow-hidden bg-gradient-to-r from-violet-700 via-purple-600 to-fuchsia-600 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.18),_transparent_55%)]" />
+    <div className="relative h-12 w-full overflow-hidden bg-violet-700 text-white">
       <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 text-xs font-medium sm:text-sm">
           <motion.span

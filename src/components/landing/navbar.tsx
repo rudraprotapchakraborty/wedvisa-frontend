@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { MegaMenu } from "@/components/landing/mega-menu";
 
+import Image from "next/image";
+import logo from "../../../public/logo.png";
+
 export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -46,8 +49,15 @@ export function Navbar() {
     >
       <nav className="relative mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-2.5">
-          <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-md shadow-violet-600/25 transition-transform duration-300 group-hover:scale-105">
-            <span className="font-serif text-lg font-semibold text-white">W</span>
+          <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200/50 shadow-md shadow-slate-900/5 transition-transform duration-300 group-hover:scale-105 overflow-hidden">
+            <Image
+              src={logo}
+              alt="WedVisa Logo"
+              fill
+              sizes="36px"
+              className="object-cover"
+              priority
+            />
           </span>
           <span
             className={cn(

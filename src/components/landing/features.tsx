@@ -20,7 +20,6 @@ export function Features() {
       id="services"
       className="relative overflow-hidden bg-slate-50/80 px-4 py-24 sm:px-6 md:py-32 lg:px-8"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.06),_transparent_55%)]" />
       <div className="relative mx-auto max-w-7xl">
         <SectionHeading
           eyebrow="Features"
