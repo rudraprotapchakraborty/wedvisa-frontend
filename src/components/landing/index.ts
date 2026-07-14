@@ -1,0 +1,12 @@
+export { AnnouncementBar } from "./announcement-bar";
+export { Navbar } from "./navbar";
+export { SiteHeader } from "./site-header";
+export { Hero } from "./hero";
+export { HowItWorks } from "./how-it-works";
+export { Features } from "./features";
+export { Countries } from "./countries";
+export { Testimonials } from "./testimonials";
+export { Pricing } from "./pricing";
+export { Faq } from "./faq";
+export { CtaSection } from "./cta-section";
+export { Footer } from "./footer";
