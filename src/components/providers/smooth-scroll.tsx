@@ -21,15 +21,17 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       gsapRegistered = true;
     }
 
+    // Snappier + less continuous interpolation work than 1.35s
     const lenis = new Lenis({
-      duration: 1.35,
+      duration: 1.05,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.35,
-      wheelMultiplier: 0.92,
+      touchMultiplier: 1.2,
+      wheelMultiplier: 1,
+      // Don't fight native gesture on trackpads as hard
+      syncTouch: false,
     });
 
-    // Bridge Lenis ↔ GSAP ScrollTrigger
     lenis.on("scroll", (e) => {
       ScrollTrigger.update();
       const limit = e.limit || 1;
@@ -40,17 +42,17 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       });
     });
 
-    // Drive Lenis from GSAP ticker for shared clock
     const tickerFn = (time: number) => {
       lenis.raf(time * 1000);
-      cinematic.smoothPointer(0.09);
+      const { nx, ny, sx, sy } = cinematic.pointer;
+      if (Math.abs(nx - sx) > 0.0008 || Math.abs(ny - sy) > 0.0008) {
+        cinematic.smoothPointer(0.12);
+      }
     };
     gsap.ticker.add(tickerFn);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(1000, 16);
 
     document.documentElement.classList.add("lenis", "lenis-smooth");
-
-    // Expose for optional external control
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
     const onPointer = (e: PointerEvent) => {
@@ -69,14 +71,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       const el = document.querySelector(id);
       if (!el) return;
       e.preventDefault();
-      lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1.6 });
+      lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1.2 });
     };
     document.addEventListener("click", onAnchorClick);
 
-    // Refresh after images/layout settle
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener("load", refresh);
-    const t = window.setTimeout(refresh, 600);
+    const t = window.setTimeout(refresh, 800);
 
     return () => {
       window.clearTimeout(t);

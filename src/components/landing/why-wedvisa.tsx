@@ -165,6 +165,7 @@ export function WhyWedvisa() {
                       alt={arch.alt}
                       fill
                       sizes="160px"
+                      quality={70}
                       className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
                     />
                   </div>

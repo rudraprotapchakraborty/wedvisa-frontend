@@ -136,6 +136,7 @@ export function FinalCta() {
             alt="Wedding reception outdoor tables at dusk"
             fill
             sizes="(max-width: 1024px) 100vw, 42vw"
+            quality={75}
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" />

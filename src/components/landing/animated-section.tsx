@@ -69,23 +69,25 @@ export function FadeIn({
     none: {},
   };
 
+  // No filter:blur on enter — y/opacity alone keeps the reveal feel without
+  // forcing expensive layer repaints during scroll-triggered animations.
   return (
     <motion.div
       className={className}
       initial={{
         opacity: 0,
         ...offsets[direction],
-        ...(blur ? { filter: "blur(10px)" } : {}),
+        ...(blur ? { scale: 0.985 } : {}),
       }}
       whileInView={{
         opacity: 1,
         x: 0,
         y: 0,
-        ...(blur ? { filter: "blur(0px)" } : {}),
+        scale: 1,
       }}
       viewport={defaultViewport}
       transition={{
-        duration: 0.85,
+        duration: 0.75,
         delay,
         ease: easeOutExpo,
       }}

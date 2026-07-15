@@ -1,18 +1,19 @@
 "use client";
 
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  Environment,
-  Float,
-  MeshDistortMaterial,
-  MeshTransmissionMaterial,
-  Sparkles,
-} from "@react-three/drei";
+import { Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 import { cinematic } from "@/lib/cinematic-store";
 
-/* ─── Custom shader: volumetric soft field ─── */
+/**
+ * Performance-first cinematic hero scene.
+ * Same composition (rings, glass panels, fog, particles, cards) —
+ * but NO MeshTransmission / Environment / MeshDistort (those re-render
+ * the whole scene multiple times per frame and crush mid-range GPUs).
+ */
+
+/* ─── Soft volumetric field (cheap 2-octave noise) ─── */
 const fogVertex = /* glsl */ `
   varying vec2 vUv;
   void main() {
@@ -27,7 +28,6 @@ const fogFragment = /* glsl */ `
   uniform vec3 uColorB;
   varying vec2 vUv;
 
-  // Simplex-ish noise
   float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
   }
@@ -41,27 +41,15 @@ const fogFragment = /* glsl */ `
     vec2 u = f * f * (3.0 - 2.0 * f);
     return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
   }
-  float fbm(vec2 p) {
-    float v = 0.0;
-    float a = 0.5;
-    for (int i = 0; i < 5; i++) {
-      v += a * noise(p);
-      p *= 2.0;
-      a *= 0.5;
-    }
-    return v;
-  }
 
   void main() {
     vec2 uv = vUv;
-    float n = fbm(uv * 2.4 + uTime * 0.04);
-    float n2 = fbm(uv * 3.5 - uTime * 0.03 + 10.0);
+    float n = noise(uv * 2.4 + uTime * 0.04);
+    float n2 = noise(uv * 3.5 - uTime * 0.03 + 10.0);
     float mask = smoothstep(0.15, 0.85, n * 0.65 + n2 * 0.35);
-    float radial = 1.0 - length(uv - 0.5) * 1.35;
-    radial = clamp(radial, 0.0, 1.0);
+    float radial = clamp(1.0 - length(uv - 0.5) * 1.35, 0.0, 1.0);
     vec3 col = mix(uColorA, uColorB, mask);
-    float alpha = mask * radial * 0.42;
-    gl_FragColor = vec4(col, alpha);
+    gl_FragColor = vec4(col, mask * radial * 0.42);
   }
 `;
 
@@ -82,7 +70,7 @@ function VolumetricFog() {
 
   return (
     <mesh position={[0.4, 0.1, -1.8]} scale={[5.5, 4.2, 1]}>
-      <planeGeometry args={[1, 1, 1, 1]} />
+      <planeGeometry args={[1, 1]} />
       <shaderMaterial
         ref={mat}
         vertexShader={fogVertex}
@@ -96,7 +84,6 @@ function VolumetricFog() {
   );
 }
 
-/* ─── Animated architectural grid ─── */
 function DepthGrid() {
   const ref = useRef<THREE.Group>(null);
 
@@ -113,7 +100,7 @@ function DepthGrid() {
     const geo = new THREE.BufferGeometry();
     const pts: number[] = [];
     const size = 8;
-    const div = 16;
+    const div = 10;
     const step = size / div;
     for (let i = 0; i <= div; i++) {
       const v = -size / 2 + i * step;
@@ -138,65 +125,61 @@ function DepthGrid() {
   );
 }
 
-/* ─── Glass architectural panels ─── */
+/** Frosted glass look without multipass transmission */
+function glassMaterial(color: string, opacity = 0.55) {
+  return (
+    <meshStandardMaterial
+      color={color}
+      metalness={0.15}
+      roughness={0.18}
+      transparent
+      opacity={opacity}
+      depthWrite={false}
+      envMapIntensity={0}
+    />
+  );
+}
+
 function GlassPanels() {
   const group = useRef<THREE.Group>(null);
+  const panels = useMemo(
+    () =>
+      [
+        { pos: [1.6, 0.3, -0.4] as const, rot: [0.1, -0.5, 0.05] as const, s: [0.9, 1.4, 0.04] as const, phase: 0 },
+        { pos: [-1.5, -0.2, -0.6] as const, rot: [0.05, 0.6, -0.08] as const, s: [0.7, 1.1, 0.04] as const, phase: 1.1 },
+        { pos: [0.2, 1.1, -1.1] as const, rot: [0.3, 0.2, 0.1] as const, s: [1.1, 0.55, 0.03] as const, phase: 2.2 },
+      ] as const,
+    []
+  );
 
   useFrame((state) => {
     if (!group.current) return;
     const t = state.clock.elapsedTime;
     const p = cinematic.scroll.heroProgress;
     group.current.rotation.y = t * 0.04 + p * 0.4;
-    group.current.position.y = Math.sin(t * 0.35) * 0.06;
+    group.current.children.forEach((child, i) => {
+      child.position.y = panels[i].pos[1] + Math.sin(t * 0.8 + panels[i].phase) * 0.04;
+    });
   });
-
-  const panels = useMemo(
-    () =>
-      [
-        { pos: [1.6, 0.3, -0.4] as const, rot: [0.1, -0.5, 0.05] as const, s: [0.9, 1.4, 0.04] as const },
-        { pos: [-1.5, -0.2, -0.6] as const, rot: [0.05, 0.6, -0.08] as const, s: [0.7, 1.1, 0.04] as const },
-        { pos: [0.2, 1.1, -1.1] as const, rot: [0.3, 0.2, 0.1] as const, s: [1.1, 0.55, 0.03] as const },
-      ] as const,
-    []
-  );
 
   return (
     <group ref={group}>
       {panels.map((panel, i) => (
-        <Float key={i} speed={0.8 + i * 0.15} floatIntensity={0.2} rotationIntensity={0.08}>
-          <mesh position={[...panel.pos]} rotation={[...panel.rot]}>
-            <boxGeometry args={[...panel.s]} />
-            <MeshTransmissionMaterial
-              backside
-              samples={3}
-              resolution={192}
-              thickness={0.4}
-              roughness={0.22}
-              chromaticAberration={0.06}
-              anisotropy={0.15}
-              distortion={0.12}
-              distortionScale={0.25}
-              temporalDistortion={0.04}
-              ior={1.45}
-              color="#f0e8dc"
-              attenuationColor="#c4531d"
-              attenuationDistance={0.9}
-              transparent
-              opacity={0.9}
-            />
-          </mesh>
-        </Float>
+        <mesh key={i} position={[...panel.pos]} rotation={[...panel.rot]}>
+          <boxGeometry args={[...panel.s]} />
+          {glassMaterial("#f0e8dc", 0.42)}
+        </mesh>
       ))}
     </group>
   );
 }
 
-/* ─── Interlocked ceremonial rings ─── */
 function CeremonialRings() {
   const group = useRef<THREE.Group>(null);
   const ringA = useRef<THREE.Mesh>(null);
   const ringB = useRef<THREE.Mesh>(null);
   const ringC = useRef<THREE.Mesh>(null);
+  const core = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -213,71 +196,67 @@ function CeremonialRings() {
     if (ringA.current) ringA.current.rotation.z = t * 0.08;
     if (ringB.current) ringB.current.rotation.z = -t * 0.11;
     if (ringC.current) ringC.current.rotation.x = t * 0.06;
+    if (core.current) {
+      const s = 1 + Math.sin(t * 1.5) * 0.06;
+      core.current.scale.setScalar(s);
+    }
   });
 
   return (
     <group ref={group} position={[0.2, 0.05, 0]}>
-      <mesh ref={ringA} rotation={[Math.PI / 2.35, 0.25, 0.1]} castShadow>
-        <torusGeometry args={[1.2, 0.048, 64, 160]} />
-        <MeshTransmissionMaterial
-          backside
-          samples={4}
-          resolution={256}
-          thickness={0.4}
-          roughness={0.12}
-          chromaticAberration={0.05}
-          anisotropy={0.12}
-          distortion={0.1}
-          distortionScale={0.22}
-          temporalDistortion={0.05}
-          ior={1.42}
+      {/* Glass ring — transparent standard, not multipass */}
+      <mesh ref={ringA} rotation={[Math.PI / 2.35, 0.25, 0.1]}>
+        <torusGeometry args={[1.2, 0.048, 32, 96]} />
+        <meshStandardMaterial
           color="#ebe2d6"
-          attenuationColor="#c4531d"
-          attenuationDistance={1.1}
+          metalness={0.25}
+          roughness={0.12}
+          transparent
+          opacity={0.55}
+          depthWrite={false}
         />
       </mesh>
 
-      <mesh ref={ringB} rotation={[Math.PI / 1.65, -0.4, 0.55]} castShadow>
-        <torusGeometry args={[0.95, 0.04, 64, 160]} />
+      <mesh ref={ringB} rotation={[Math.PI / 1.65, -0.4, 0.55]}>
+        <torusGeometry args={[0.95, 0.04, 32, 96]} />
         <meshStandardMaterial
           color="#c4531d"
-          metalness={0.92}
-          roughness={0.22}
-          envMapIntensity={1.4}
+          metalness={0.85}
+          roughness={0.28}
+          emissive="#c4531d"
+          emissiveIntensity={0.12}
         />
       </mesh>
 
       <mesh ref={ringC} rotation={[0.45, 0.95, 0.25]}>
-        <torusGeometry args={[1.45, 0.01, 32, 128]} />
+        <torusGeometry args={[1.45, 0.01, 16, 64]} />
         <meshStandardMaterial
           color="#1c1613"
-          metalness={0.7}
-          roughness={0.35}
+          metalness={0.6}
+          roughness={0.4}
           transparent
           opacity={0.3}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Distorted core orb — soft energy */}
-      <mesh>
-        <sphereGeometry args={[0.22, 48, 48]} />
-        <MeshDistortMaterial
+      {/* Core orb — emissive pulse instead of MeshDistort */}
+      <mesh ref={core}>
+        <sphereGeometry args={[0.22, 24, 24]} />
+        <meshStandardMaterial
           color="#c4531d"
           emissive="#c4531d"
-          emissiveIntensity={0.35}
-          roughness={0.25}
-          metalness={0.5}
-          distort={0.25}
-          speed={1.5}
+          emissiveIntensity={0.55}
+          roughness={0.3}
+          metalness={0.45}
           transparent
-          opacity={0.85}
+          opacity={0.9}
         />
       </mesh>
     </group>
   );
 }
 
-/* ─── Floating holographic cards (product metaphor) ─── */
 function HoloCards() {
   const group = useRef<THREE.Group>(null);
   const cards = useMemo(
@@ -306,17 +285,13 @@ function HoloCards() {
       {cards.map((c, i) => (
         <mesh key={i} position={[c.x, c.y, c.z]} rotation={[0.1, c.ry, 0]}>
           <boxGeometry args={[0.55, 0.75, 0.02]} />
-          <meshPhysicalMaterial
+          <meshStandardMaterial
             color="#faf6f0"
-            metalness={0.15}
-            roughness={0.2}
-            transmission={0.55}
-            thickness={0.3}
+            metalness={0.2}
+            roughness={0.25}
             transparent
-            opacity={0.85}
-            clearcoat={1}
-            clearcoatRoughness={0.15}
-            envMapIntensity={0.8}
+            opacity={0.72}
+            depthWrite={false}
           />
         </mesh>
       ))}
@@ -324,22 +299,19 @@ function HoloCards() {
   );
 }
 
-/* ─── GPU particle constellation ─── */
-function Constellation({ count = 180 }: { count?: number }) {
+function Constellation({ count = 90 }: { count?: number }) {
   const ref = useRef<THREE.Points>(null);
-  const { positions, speeds } = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    const speeds = new Float32Array(count);
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const r = 1.2 + Math.random() * 2.8;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.7;
-      positions[i * 3 + 2] = r * Math.cos(phi) - 0.5;
-      speeds[i] = 0.2 + Math.random() * 0.8;
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.7;
+      pos[i * 3 + 2] = r * Math.cos(phi) - 0.5;
     }
-    return { positions, speeds };
+    return pos;
   }, [count]);
 
   useFrame((state) => {
@@ -348,12 +320,6 @@ function Constellation({ count = 180 }: { count?: number }) {
     const p = cinematic.scroll.heroProgress;
     ref.current.rotation.y = t * 0.03 + p * 0.5;
     ref.current.rotation.x = Math.sin(t * 0.05) * 0.08;
-    const pos = ref.current.geometry.attributes.position
-      .array as Float32Array;
-    for (let i = 0; i < count; i++) {
-      pos[i * 3 + 1] += Math.sin(t * speeds[i] + i) * 0.0008;
-    }
-    ref.current.geometry.attributes.position.needsUpdate = true;
   });
 
   return (
@@ -374,7 +340,6 @@ function Constellation({ count = 180 }: { count?: number }) {
   );
 }
 
-/* ─── Scroll + pointer driven camera ─── */
 function CinematicCamera() {
   const { camera } = useThree();
   const target = useMemo(() => new THREE.Vector3(0.15, 0.05, 0), []);
@@ -384,7 +349,6 @@ function CinematicCamera() {
     const { sx, sy } = cinematic.pointer;
     const vel = Math.min(Math.abs(cinematic.scroll.velocity) / 1200, 1);
 
-    // Dolly + orbit path
     const z = 4.4 - p * 1.4 - vel * 0.15;
     const x = Math.sin(p * Math.PI * 0.5) * 0.55 + sx * 0.35;
     const y = 0.15 + p * 0.35 + sy * 0.2;
@@ -396,55 +360,19 @@ function CinematicCamera() {
     target.x = 0.15 + sx * 0.12;
     target.y = 0.05 - p * 0.15 + sy * 0.08;
     camera.lookAt(target);
-
-    // Subtle FOV breathe
-    if ("fov" in camera) {
-      const cam = camera as THREE.PerspectiveCamera;
-      const desired = 36 + p * 6 + vel * 2;
-      cam.fov += (desired - cam.fov) * 0.05;
-      cam.updateProjectionMatrix();
-    }
   });
 
   return null;
 }
 
 function SceneLights() {
-  const key = useRef<THREE.DirectionalLight>(null);
-  const rim = useRef<THREE.PointLight>(null);
-
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    const p = cinematic.scroll.heroProgress;
-    if (key.current) {
-      key.current.intensity = 1.05 + Math.sin(t * 0.4) * 0.08 + p * 0.2;
-      key.current.position.x = 4 + Math.sin(t * 0.2) * 0.5;
-    }
-    if (rim.current) {
-      rim.current.intensity = 0.55 + Math.sin(t * 0.6) * 0.1;
-    }
-  });
-
   return (
     <>
-      <ambientLight intensity={0.4} color="#f7f1ea" />
-      <directionalLight
-        ref={key}
-        position={[4.5, 6, 3.5]}
-        intensity={1.1}
-        color="#fff6ec"
-      />
-      <directionalLight position={[-4, 2, -2]} intensity={0.35} color="#c4531d" />
-      <pointLight ref={rim} position={[0, -0.5, 2.5]} intensity={0.5} color="#f6f1ea" />
-      <pointLight position={[1.5, 1.5, -1]} intensity={0.4} color="#c4531d" />
-      <spotLight
-        position={[0, 4, 2]}
-        angle={0.45}
-        penumbra={0.7}
-        intensity={0.6}
-        color="#ffe8d4"
-        castShadow={false}
-      />
+      <ambientLight intensity={0.55} color="#f7f1ea" />
+      <directionalLight position={[4.5, 6, 3.5]} intensity={1.15} color="#fff6ec" />
+      <directionalLight position={[-4, 2, -2]} intensity={0.4} color="#c4531d" />
+      <pointLight position={[0, -0.5, 2.5]} intensity={0.45} color="#f6f1ea" />
+      <pointLight position={[1.5, 1.5, -1]} intensity={0.35} color="#c4531d" />
     </>
   );
 }
@@ -459,40 +387,70 @@ function SceneContent() {
       <CeremonialRings />
       <GlassPanels />
       <HoloCards />
-      <Constellation count={160} />
+      <Constellation count={90} />
       <Sparkles
-        count={40}
+        count={24}
         scale={[5, 3.5, 4]}
         size={1.2}
         speed={0.25}
         opacity={0.35}
         color="#c4531d"
       />
-      <Environment preset="city" environmentIntensity={0.5} />
     </>
   );
 }
 
 export function HeroScene() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting && document.visibilityState === "visible");
+      },
+      { rootMargin: "40px 0px", threshold: 0 }
+    );
+    io.observe(el);
+
+    const onVis = () => {
+      const r = el.getBoundingClientRect();
+      const inView = r.bottom > 0 && r.top < window.innerHeight;
+      setVisible(inView && document.visibilityState === "visible");
+    };
+    document.addEventListener("visibilitychange", onVis);
+
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, []);
+
   return (
-    <div className="webgl-canvas absolute inset-0 h-full w-full" aria-hidden>
-      <Canvas
-        dpr={[1, 1.75]}
-        gl={{
-          antialias: true,
-          alpha: true,
-          powerPreference: "high-performance",
-          stencil: false,
-          depth: true,
-        }}
-        camera={{ position: [0, 0.15, 4.4], fov: 36, near: 0.1, far: 60 }}
-        style={{ background: "transparent" }}
-        frameloop="always"
-      >
-        <Suspense fallback={null}>
-          <SceneContent />
-        </Suspense>
-      </Canvas>
+    <div ref={wrapRef} className="webgl-canvas absolute inset-0 h-full w-full" aria-hidden>
+      {visible ? (
+        <Canvas
+          dpr={1}
+          gl={{
+            antialias: false,
+            alpha: true,
+            powerPreference: "high-performance",
+            stencil: false,
+            depth: true,
+            preserveDrawingBuffer: false,
+          }}
+          camera={{ position: [0, 0.15, 4.4], fov: 36, near: 0.1, far: 40 }}
+          style={{ background: "transparent" }}
+          frameloop="always"
+        >
+          <Suspense fallback={null}>
+            <SceneContent />
+          </Suspense>
+        </Canvas>
+      ) : null}
     </div>
   );
 }

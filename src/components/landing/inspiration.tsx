@@ -81,6 +81,7 @@ export function Inspiration() {
                         alt={card.alt}
                         fill
                         sizes="(max-width: 1024px) 100vw, 50vw"
+                        quality={75}
                         className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                       />
                       <div className="absolute left-4 top-4 rounded-full border border-white/60 bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-800 shadow-[var(--shadow-sm)] backdrop-blur-sm">

@@ -50,7 +50,7 @@ export function Magnetic({
       style={{ x: sx, y: sy }}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={cn("inline-flex will-change-transform", className)}
+      className={cn("inline-flex", className)}
     >
       {children}
     </motion.div>

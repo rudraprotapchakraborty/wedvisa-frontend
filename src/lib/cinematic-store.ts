@@ -28,9 +28,18 @@ export const cinematic = {
   scroll,
   pointer,
 
-  setScroll( partial: Partial<typeof scroll> ) {
-    Object.assign(scroll, partial);
-    listeners.forEach((fn) => fn());
+  setScroll(partial: Partial<typeof scroll>) {
+    let changed = false;
+    (Object.keys(partial) as (keyof typeof scroll)[]).forEach((key) => {
+      const next = partial[key];
+      if (typeof next === "number" && scroll[key] !== next) {
+        scroll[key] = next;
+        changed = true;
+      }
+    });
+    if (changed) {
+      listeners.forEach((fn) => fn());
+    }
   },
 
   setPointer(clientX: number, clientY: number) {
@@ -50,6 +59,8 @@ export const cinematic = {
 
   subscribe(fn: () => void) {
     listeners.add(fn);
-    return () => listeners.delete(fn);
+    return () => {
+      listeners.delete(fn);
+    };
   },
 };

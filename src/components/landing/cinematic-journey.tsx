@@ -78,7 +78,8 @@ export function CinematicJourney() {
               chapters.length - 1,
               Math.floor(p * chapters.length)
             );
-            setActive(idx);
+            // Only re-render when the active chapter actually changes
+            setActive((prev) => (prev === idx ? prev : idx));
           },
         },
       });

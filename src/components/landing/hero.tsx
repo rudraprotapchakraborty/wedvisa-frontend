@@ -2,10 +2,8 @@
 
 import {
   motion,
-  useMotionTemplate,
   useScroll,
   useTransform,
-  useSpring,
 } from "framer-motion";
 import { Check, FileText, ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -41,45 +39,43 @@ export function Hero() {
     return () => unsub();
   }, [scrollYProgress]);
 
-  const smooth = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 24,
-    mass: 0.4,
-  });
+  // No useSpring — Lenis already smooths scroll; spring doubled the work
+  // and forced continuous style recalcs after the user stopped scrolling.
+  const p = scrollYProgress;
 
-  const titleY = useTransform(smooth, [0, 0.35, 0.7], [0, -40, -120]);
-  const titleOpacity = useTransform(smooth, [0, 0.25, 0.55], [1, 1, 0]);
-  const titleBlur = useTransform(smooth, [0, 0.45, 0.65], [0, 0, 12]);
-  const titleFilter = useMotionTemplate`blur(${titleBlur}px)`;
+  const titleY = useTransform(p, [0, 0.35, 0.7], [0, -40, -120]);
+  const titleOpacity = useTransform(p, [0, 0.25, 0.55], [1, 1, 0]);
+  // Scale exit instead of filter:blur (blur forces full-layer repaint)
+  const titleScale = useTransform(p, [0, 0.45, 0.65], [1, 1, 0.96]);
 
-  const sceneScale = useTransform(smooth, [0, 0.5, 1], [1, 1.08, 1.18]);
-  const sceneOpacity = useTransform(smooth, [0, 0.7, 1], [1, 1, 0.35]);
-  const sceneX = useTransform(smooth, [0, 1], [0, 40]);
+  const sceneScale = useTransform(p, [0, 0.5, 1], [1, 1.08, 1.18]);
+  const sceneOpacity = useTransform(p, [0, 0.7, 1], [1, 1, 0.35]);
+  const sceneX = useTransform(p, [0, 1], [0, 40]);
 
-  const glowAX = useTransform(smooth, [0, 1], [0, 80]);
-  const glowAY = useTransform(smooth, [0, 1], [0, 60]);
-  const glowBX = useTransform(smooth, [0, 1], [0, -60]);
+  const glowAX = useTransform(p, [0, 1], [0, 80]);
+  const glowAY = useTransform(p, [0, 1], [0, 60]);
+  const glowBX = useTransform(p, [0, 1], [0, -60]);
 
-  const cardOpacity = useTransform(smooth, [0.15, 0.35, 0.85, 1], [0, 1, 1, 0.4]);
-  const cardY = useTransform(smooth, [0.15, 0.4, 1], [80, 0, -40]);
-  const cardRotate = useTransform(smooth, [0.15, 0.45], [8, 0]);
-  const cardScale = useTransform(smooth, [0.15, 0.4], [0.92, 1]);
-  const progressWidth = useTransform(smooth, [0.2, 0.55], ["0%", "62%"]);
+  const cardOpacity = useTransform(p, [0.15, 0.35, 0.85, 1], [0, 1, 1, 0.4]);
+  const cardY = useTransform(p, [0.15, 0.4, 1], [80, 0, -40]);
+  const cardRotate = useTransform(p, [0.15, 0.45], [8, 0]);
+  const cardScale = useTransform(p, [0.15, 0.4], [0.92, 1]);
+  const progressWidth = useTransform(p, [0.2, 0.55], ["0%", "62%"]);
 
-  const ctaOpacity = useTransform(smooth, [0, 0.2, 0.55], [1, 1, 0]);
-  const ctaY = useTransform(smooth, [0, 0.5], [0, 40]);
+  const ctaOpacity = useTransform(p, [0, 0.2, 0.55], [1, 1, 0]);
+  const ctaY = useTransform(p, [0, 0.5], [0, 40]);
 
-  const letterbox = useTransform(smooth, [0, 0.08, 0.9, 1], [0, 0, 0, 48]);
-  const scrollHintOpacity = useTransform(smooth, [0, 0.12], [1, 0]);
+  const letterbox = useTransform(p, [0, 0.08, 0.9, 1], [0, 0, 0, 48]);
+  const scrollHintOpacity = useTransform(p, [0, 0.12], [1, 0]);
 
-  const polaroidA = useTransform(smooth, [0, 0.5], [0, -90]);
-  const polaroidB = useTransform(smooth, [0, 0.5], [0, -60]);
-  const polaroidC = useTransform(smooth, [0, 0.5], [0, 70]);
-  const polaroidD = useTransform(smooth, [0, 0.5], [0, 50]);
-  const polaroidRotA = useTransform(smooth, [0, 0.5], [-12, -22]);
-  const polaroidRotB = useTransform(smooth, [0, 0.5], [14, 24]);
-  const polaroidRotC = useTransform(smooth, [0, 0.5], [6, 14]);
-  const polaroidRotD = useTransform(smooth, [0, 0.5], [-8, -16]);
+  const polaroidA = useTransform(p, [0, 0.5], [0, -90]);
+  const polaroidB = useTransform(p, [0, 0.5], [0, -60]);
+  const polaroidC = useTransform(p, [0, 0.5], [0, 70]);
+  const polaroidD = useTransform(p, [0, 0.5], [0, 50]);
+  const polaroidRotA = useTransform(p, [0, 0.5], [-12, -22]);
+  const polaroidRotB = useTransform(p, [0, 0.5], [14, 24]);
+  const polaroidRotC = useTransform(p, [0, 0.5], [6, 14]);
+  const polaroidRotD = useTransform(p, [0, 0.5], [-8, -16]);
 
   return (
     <section ref={pinRef} className="relative h-[240vh] w-full">
@@ -97,7 +93,8 @@ export function Hero() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_45%,rgba(196,83,29,0.08),transparent_55%)]" />
         </div>
 
-        <div className="grain pointer-events-none absolute inset-0 overflow-hidden" aria-hidden />
+        {/* Static grain only — animated grain + global grain was double-compositing */}
+        <div className="grain grain-static pointer-events-none absolute inset-0 overflow-hidden" aria-hidden />
 
         <motion.div
           className="pointer-events-none absolute inset-0 z-0"
@@ -113,12 +110,12 @@ export function Hero() {
         <div className="relative z-20 mx-auto flex h-full max-w-[var(--max-width)] flex-col justify-center px-4 pt-[var(--header-height)] sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 lg:grid-cols-12">
             <div className="lg:col-span-6 xl:col-span-5">
-              <motion.div style={{ y: titleY, opacity: titleOpacity, filter: titleFilter }}>
+              <motion.div style={{ y: titleY, opacity: titleOpacity, scale: titleScale }}>
                 <motion.div
                   initial={{ opacity: 0, y: 16, clipPath: "inset(0 100% 0 0)" }}
                   animate={{ opacity: 1, y: 0, clipPath: "inset(0 0% 0 0)" }}
                   transition={{ duration: 1.1, ease: easeOutExpo }}
-                  className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--border-strong)] bg-white/50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--accent)] shadow-[var(--shadow-sm)] backdrop-blur-md"
+                  className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--border-strong)] bg-white/80 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--accent)] shadow-[var(--shadow-sm)]"
                 >
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-40" />
@@ -219,7 +216,14 @@ export function Hero() {
                 aria-hidden
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image src="/1.png" alt="" fill sizes="120px" className="object-cover" />
+                  <Image
+                    src="/1.png"
+                    alt=""
+                    fill
+                    sizes="120px"
+                    quality={65}
+                    className="object-cover"
+                  />
                 </div>
               </motion.div>
               <motion.div
@@ -228,7 +232,14 @@ export function Hero() {
                 aria-hidden
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image src="/2.png" alt="" fill sizes="120px" className="object-cover" />
+                  <Image
+                    src="/2.png"
+                    alt=""
+                    fill
+                    sizes="120px"
+                    quality={65}
+                    className="object-cover"
+                  />
                 </div>
               </motion.div>
               <motion.div
@@ -237,7 +248,14 @@ export function Hero() {
                 aria-hidden
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image src="/3.png" alt="" fill sizes="120px" className="object-cover" />
+                  <Image
+                    src="/3.png"
+                    alt=""
+                    fill
+                    sizes="120px"
+                    quality={65}
+                    className="object-cover"
+                  />
                 </div>
               </motion.div>
               <motion.div
@@ -246,7 +264,14 @@ export function Hero() {
                 aria-hidden
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image src="/4.png" alt="" fill sizes="110px" className="object-cover" />
+                  <Image
+                    src="/4.png"
+                    alt=""
+                    fill
+                    sizes="110px"
+                    quality={65}
+                    className="object-cover"
+                  />
                 </div>
               </motion.div>
 
@@ -259,7 +284,7 @@ export function Hero() {
                 }}
                 className="relative z-20 w-full max-w-[330px]"
               >
-                <div className="overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-white/92 shadow-[var(--shadow-xl)] backdrop-blur-2xl">
+                <div className="overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-white shadow-[var(--shadow-xl)]">
                   <div className="flex items-center justify-between bg-slate-900 px-5 py-4 text-white">
                     <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--accent)] text-xs font-bold shadow-[0_0_20px_var(--accent-glow)]">
@@ -349,12 +374,9 @@ export function Hero() {
           <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">
             Scroll
           </span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <div className="scroll-hint-bounce">
             <ChevronDown className="h-4 w-4 text-slate-400" />
-          </motion.div>
+          </div>
         </motion.div>
 
         <motion.div

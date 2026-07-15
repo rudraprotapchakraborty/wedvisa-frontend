@@ -152,6 +152,7 @@ export function HowItWorks() {
                   alt="Couple planning wedding together"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  quality={75}
                   className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent" />
