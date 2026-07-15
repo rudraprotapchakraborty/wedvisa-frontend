@@ -1,11 +1,64 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   WedVisa Design System — Museum-grade tokens
+   Warm monochrome foundation · Copper accent
+   ───────────────────────────────────────────── */
+
 :root {
-  --background: #f6efe7;
-  --foreground: #000000;
-  --violet: #e85a23;
-  --violet-dark: #d04b19;
-  --fuchsia: #e85a23;
+  /* Surfaces */
+  --background: #f6f1ea;
+  --background-elevated: #fbf8f4;
+  --background-muted: #efe8df;
+  --background-dark: #0c0a09;
+  --background-dark-elevated: #161210;
+  --foreground: #0c0a09;
+  --foreground-muted: #5c534a;
+  --foreground-subtle: #8a8076;
+  --foreground-on-dark: #f6f1ea;
+  --foreground-on-dark-muted: rgba(246, 241, 234, 0.62);
+
+  /* Brand accent — refined copper */
+  --accent: #c4531d;
+  --accent-hover: #a84416;
+  --accent-soft: rgba(196, 83, 29, 0.1);
+  --accent-glow: rgba(196, 83, 29, 0.22);
+  --accent-ring: rgba(196, 83, 29, 0.35);
+
+  /* Borders & lines */
+  --border: rgba(28, 22, 19, 0.08);
+  --border-strong: rgba(28, 22, 19, 0.14);
+  --border-dark: rgba(246, 241, 234, 0.1);
+
+  /* Depth */
+  --shadow-sm: 0 1px 2px rgba(12, 10, 9, 0.04);
+  --shadow-md: 0 8px 24px -8px rgba(12, 10, 9, 0.08), 0 2px 8px -2px rgba(12, 10, 9, 0.04);
+  --shadow-lg: 0 24px 48px -16px rgba(12, 10, 9, 0.12), 0 8px 16px -8px rgba(12, 10, 9, 0.06);
+  --shadow-xl: 0 40px 80px -24px rgba(12, 10, 9, 0.18);
+  --shadow-accent: 0 12px 32px -8px rgba(196, 83, 29, 0.28);
+
+  /* Layout */
+  --header-height: 72px;
+  --max-width: 72rem;
+  --section-y: clamp(5rem, 10vw, 8.5rem);
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 180ms;
+  --duration-base: 320ms;
+  --duration-slow: 700ms;
+
+  /* Legacy aliases (existing violet/fuchsia remaps) */
+  --violet: #c4531d;
+  --violet-dark: #a84416;
+  --fuchsia: #c4531d;
 }
 
 @theme inline {
@@ -16,66 +69,67 @@
   --animate-accordion-down: accordion-down 0.3s ease-out;
   --animate-accordion-up: accordion-up 0.3s ease-out;
 
-  /* Brand overrides for Tailwind 4 colors */
-  --color-violet-50: #fef5f1;
-  --color-violet-100: #fdebe4;
-  --color-violet-200: #fbd3c2;
-  --color-violet-300: #f9ae8e;
-  --color-violet-400: #f68352;
-  --color-violet-500: #e85a23;
-  --color-violet-600: #e85a23;
-  --color-violet-700: #d04b19;
-  --color-violet-800: #ad3c13;
-  --color-violet-900: #8c310f;
-  --color-violet-950: #000000;
+  /* Brand scale — copper through warm neutrals */
+  --color-violet-50: #fdf6f1;
+  --color-violet-100: #faebe1;
+  --color-violet-200: #f5d4c0;
+  --color-violet-300: #eeb08a;
+  --color-violet-400: #e07d4a;
+  --color-violet-500: #c4531d;
+  --color-violet-600: #c4531d;
+  --color-violet-700: #a84416;
+  --color-violet-800: #8a3714;
+  --color-violet-900: #712f15;
+  --color-violet-950: #3d180a;
 
-  --color-fuchsia-50: #fef5f1;
-  --color-fuchsia-100: #fdebe4;
-  --color-fuchsia-200: #fbd3c2;
-  --color-fuchsia-300: #f9ae8e;
-  --color-fuchsia-400: #f68352;
-  --color-fuchsia-500: #e85a23;
-  --color-fuchsia-600: #e85a23;
-  --color-fuchsia-700: #d04b19;
-  --color-fuchsia-800: #ad3c13;
-  --color-fuchsia-900: #8c310f;
-  --color-fuchsia-950: #000000;
+  --color-fuchsia-50: #fdf6f1;
+  --color-fuchsia-100: #faebe1;
+  --color-fuchsia-200: #f5d4c0;
+  --color-fuchsia-300: #eeb08a;
+  --color-fuchsia-400: #e07d4a;
+  --color-fuchsia-500: #c4531d;
+  --color-fuchsia-600: #c4531d;
+  --color-fuchsia-700: #a84416;
+  --color-fuchsia-800: #8a3714;
+  --color-fuchsia-900: #712f15;
+  --color-fuchsia-950: #3d180a;
 
-  --color-purple-50: #fef5f1;
-  --color-purple-100: #fdebe4;
-  --color-purple-200: #fbd3c2;
-  --color-purple-300: #f9ae8e;
-  --color-purple-400: #f68352;
-  --color-purple-500: #e85a23;
-  --color-purple-600: #e85a23;
-  --color-purple-700: #d04b19;
-  --color-purple-800: #ad3c13;
-  --color-purple-900: #8c310f;
-  --color-purple-950: #000000;
+  --color-purple-50: #fdf6f1;
+  --color-purple-100: #faebe1;
+  --color-purple-200: #f5d4c0;
+  --color-purple-300: #eeb08a;
+  --color-purple-400: #e07d4a;
+  --color-purple-500: #c4531d;
+  --color-purple-600: #c4531d;
+  --color-purple-700: #a84416;
+  --color-purple-800: #8a3714;
+  --color-purple-900: #712f15;
+  --color-purple-950: #3d180a;
 
-  --color-indigo-50: #fef5f1;
-  --color-indigo-100: #fdebe4;
-  --color-indigo-200: #fbd3c2;
-  --color-indigo-300: #f9ae8e;
-  --color-indigo-400: #f68352;
-  --color-indigo-500: #e85a23;
-  --color-indigo-600: #e85a23;
-  --color-indigo-700: #d04b19;
-  --color-indigo-800: #ad3c13;
-  --color-indigo-900: #8c310f;
-  --color-indigo-950: #000000;
+  --color-indigo-50: #fdf6f1;
+  --color-indigo-100: #faebe1;
+  --color-indigo-200: #f5d4c0;
+  --color-indigo-300: #eeb08a;
+  --color-indigo-400: #e07d4a;
+  --color-indigo-500: #c4531d;
+  --color-indigo-600: #c4531d;
+  --color-indigo-700: #a84416;
+  --color-indigo-800: #8a3714;
+  --color-indigo-900: #712f15;
+  --color-indigo-950: #3d180a;
 
-  --color-slate-50: #f6efe7;
-  --color-slate-100: #eee5db;
-  --color-slate-200: #dfd2c4;
-  --color-slate-300: #cfbfad;
-  --color-slate-400: #9c8a77;
-  --color-slate-500: #6b5a4a;
-  --color-slate-600: #544436;
-  --color-slate-700: #3d2f23;
+  /* Warm slate neutrals */
+  --color-slate-50: #f6f1ea;
+  --color-slate-100: #efe8df;
+  --color-slate-200: #e0d5c8;
+  --color-slate-300: #cfc0ae;
+  --color-slate-400: #a39382;
+  --color-slate-500: #7a6c5d;
+  --color-slate-600: #5c534a;
+  --color-slate-700: #3f372f;
   --color-slate-800: #1c1613;
-  --color-slate-900: #000000;
-  --color-slate-950: #000000;
+  --color-slate-900: #0c0a09;
+  --color-slate-950: #060504;
 }
 
 @keyframes accordion-down {
@@ -100,8 +154,76 @@
   }
 }
 
+@keyframes grain {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2%, -3%);
+  }
+  30% {
+    transform: translate(3%, -1%);
+  }
+  50% {
+    transform: translate(-1%, 2%);
+  }
+  70% {
+    transform: translate(2%, 1%);
+  }
+  90% {
+    transform: translate(-3%, 3%);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -110,11 +232,14 @@ body {
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 .font-serif {
   font-family: var(--font-fraunces), ui-serif, Georgia, Cambria, "Times New Roman",
     Times, serif;
+  font-optical-sizing: auto;
 }
 
 .font-script {
@@ -122,13 +247,131 @@ body {
 }
 
 ::selection {
-  background: rgba(212, 98, 39, 0.2);
-  color: #3D3028;
+  background: rgba(196, 83, 29, 0.18);
+  color: #0c0a09;
+}
+
+/* Focus — accessible, refined */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Premium grain overlay for depth */
+.grain::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
+  z-index: 1;
 }
 
 /* Hide scrollbars for carousels while keeping scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Editorial text balance */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Soft light sweep for CTAs */
+.light-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.light-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.18) 45%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.18) 55%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.light-sweep:hover::after {
+  transform: translateX(120%);
+}
+
+/* Magnetic press feedback helper */
+.pressable {
+  transition: transform var(--duration-fast) var(--ease-out-quart);
+}
+
+.pressable:active {
+  transform: scale(0.98);
+}
+
+/* Section ambient glow */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Canvas container */
+.webgl-canvas {
+  touch-action: none;
+}
+
+/* ─── Cinematic atmosphere ─── */
+.cinematic-grain {
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grain 7s steps(8) infinite;
+}
+
+.cinematic-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 45%,
+    rgba(12, 10, 9, 0.14) 100%
+  );
+}
+
+/* Hide system cursor when custom cinematic cursor is active */
+html.has-cinematic-cursor,
+html.has-cinematic-cursor * {
+  cursor: none !important;
+}
+
+html.has-cinematic-cursor a,
+html.has-cinematic-cursor button,
+html.has-cinematic-cursor [role="button"],
+html.has-cinematic-cursor input,
+html.has-cinematic-cursor textarea,
+html.has-cinematic-cursor select,
+html.has-cinematic-cursor label,
+html.has-cinematic-cursor .cursor-magnetic {
+  cursor: none !important;
 }
 
 /* Prefer reduced motion */
@@ -143,5 +386,16 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain::before,
+  .cinematic-grain {
+    animation: none;
+  }
+
+  html.has-cinematic-cursor,
+  html.has-cinematic-cursor * {
+    cursor: auto !important;
   }
 }

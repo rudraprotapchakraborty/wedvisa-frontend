@@ -44,22 +44,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1 bg-white">
+      <main className="flex-1 bg-[var(--background-elevated)]">
         <article>
-          <header className="relative overflow-hidden border-b border-slate-200/80 pt-32 pb-14 sm:pt-36 sm:pb-16">
+          <header className="relative overflow-hidden border-b border-[var(--border)] pt-32 pb-14 sm:pt-36 sm:pb-16">
             <div
-              className={`absolute inset-0 ${post.gradient} opacity-[0.08]`}
+              className={`absolute inset-0 ${post.gradient} opacity-[0.07]`}
+              aria-hidden
             />
             <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
               <Link
                 href="/blog"
-                className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-violet-700"
+                className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[var(--accent)]"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Back to blog
+                Back to inspiration
               </Link>
 
-              <span className="inline-flex rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+              <span className="inline-flex rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--accent)]">
                 {post.category}
               </span>
 
@@ -71,8 +72,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {post.excerpt}
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-slate-200/80 pt-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white">
+              <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-[var(--border)] pt-6">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--accent)] text-sm font-semibold text-white">
                   {post.author
                     .split(" ")
                     .map((part) => part[0])
@@ -100,7 +101,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
             <div
-              className={`mb-12 h-48 overflow-hidden rounded-3xl sm:h-64 ${post.gradient}`}
+              className={`mb-12 h-48 overflow-hidden rounded-[1.75rem] sm:h-64 ${post.gradient}`}
             >
               <div className="flex h-full items-end p-8">
                 <p className="max-w-md font-serif text-2xl font-medium text-white/95 sm:text-3xl">
@@ -120,16 +121,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               ))}
             </div>
 
-            <div className="mt-14 rounded-3xl border border-slate-200 bg-slate-50 p-8 text-center sm:p-10">
+            <div className="mt-14 rounded-[1.75rem] border border-[var(--border)] bg-white p-8 text-center shadow-[var(--shadow-sm)] sm:p-10">
               <h2 className="font-serif text-2xl font-medium text-slate-900 sm:text-3xl">
                 Put this guide to work
               </h2>
               <p className="mx-auto mt-3 max-w-md text-slate-600">
                 Create a free WedVisa workspace and turn advice into a clear
-                application plan.
+                wedding plan.
               </p>
-              <Button asChild size="lg" variant="gradient" className="mt-6">
-                <Link href="/register">
+              <Button asChild size="lg" className="mt-6">
+                <Link href="/?auth=register">
                   Start free
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -139,11 +140,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </article>
 
         {related.length > 0 ? (
-          <section className="border-t border-slate-200 bg-slate-50/80 py-16 sm:py-20">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <section className="border-t border-[var(--border)] bg-[var(--background)] py-16 sm:py-20">
+            <div className="mx-auto max-w-[var(--max-width)] px-4 sm:px-6 lg:px-8">
               <div className="mb-10 flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-600">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
                     Keep reading
                   </p>
                   <h2 className="mt-2 font-serif text-3xl font-medium text-slate-900">
@@ -152,7 +153,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </div>
                 <Link
                   href="/blog"
-                  className="hidden text-sm font-semibold text-violet-600 transition hover:text-violet-700 sm:inline"
+                  className="hidden text-sm font-semibold text-[var(--accent)] transition hover:text-[var(--accent-hover)] sm:inline"
                 >
                   View all
                 </Link>

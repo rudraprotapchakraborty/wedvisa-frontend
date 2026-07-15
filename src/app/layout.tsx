@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, Alex_Brush } from "next/font/google";
+import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,34 +24,34 @@ const alexBrush = Alex_Brush({
 
 export const metadata: Metadata = {
   title: {
-    default: "WedVisa — AI-Powered Wedding Visa Platform",
+    default: "WedVisa — Free UK Wedding Planning Platform",
     template: "%s · WedVisa",
   },
   description:
-    "Make your wedding visa journey effortless. WedVisa helps couples with eligibility checks, timelines, documents, evidence, and interview prep—private, secure, and AI-powered.",
+    "Plan your wedding without the chaos. Budget, guest list, timeline, suppliers — every part of your day in one calm place. Free UK wedding planner, no account needed to start.",
   keywords: [
-    "wedding visa",
-    "partner visa",
-    "marriage visa",
-    "AI immigration",
-    "fiancé visa",
-    "spouse visa",
+    "wedding planner UK",
+    "free wedding planner",
+    "wedding budget calculator",
+    "wedding checklist",
+    "UK wedding suppliers",
+    "wedding guest list",
     "WedVisa",
   ],
   authors: [{ name: "WedVisa" }],
   openGraph: {
-    title: "WedVisa — AI-Powered Wedding Visa Platform",
+    title: "WedVisa — Free UK Wedding Planning Platform",
     description:
-      "Eligibility, documents, timelines, and interview prep for couples building a life across borders.",
+      "Budget, guest list, timeline, suppliers — every part of your day in one calm place. Free to use.",
     type: "website",
-    locale: "en_US",
+    locale: "en_GB",
     siteName: "WedVisa",
   },
   twitter: {
     card: "summary_large_image",
-    title: "WedVisa — AI-Powered Wedding Visa Platform",
+    title: "WedVisa — Free UK Wedding Planning Platform",
     description:
-      "Make your wedding visa journey effortless with AI-guided tools for couples.",
+      "Plan your wedding without the chaos. Free tools for UK couples.",
   },
   robots: {
     index: true,
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#e85a23",
+  themeColor: "#c4531d",
   width: "device-width",
   initialScale: 1,
 };
@@ -71,11 +72,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${inter.variable} ${fraunces.variable} ${alexBrush.variable} h-full scroll-smooth antialiased`}
+      lang="en-GB"
+      className={`${inter.variable} ${fraunces.variable} ${alexBrush.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50 font-sans text-slate-900">
-        {children}
+      <body className="flex min-h-full flex-col bg-[var(--background)] font-sans text-slate-900">
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

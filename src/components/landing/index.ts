@@ -3,6 +3,7 @@ export { Navbar } from "./navbar";
 export { SiteHeader } from "./site-header";
 export { Hero } from "./hero";
 export { StatsBar } from "./stats-bar";
+export { CinematicJourney } from "./cinematic-journey";
 export { PlanningTools } from "./planning-tools";
 export { HowItWorks } from "./how-it-works";
 export { MiraSection } from "./mira-section";

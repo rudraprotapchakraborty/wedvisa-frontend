@@ -5,6 +5,7 @@ import { X, Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import logo from "../../../public/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
+import { easeOutExpo } from "@/lib/motion";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -13,16 +14,19 @@ interface AuthModalProps {
   setActiveTab: (tab: "signin" | "signup") => void;
 }
 
-export function AuthModal({ isOpen, onClose, activeTab, setActiveTab }: AuthModalProps) {
+export function AuthModal({
+  isOpen,
+  onClose,
+  activeTab,
+  setActiveTab,
+}: AuthModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Form states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -30,7 +34,6 @@ export function AuthModal({ isOpen, onClose, activeTab, setActiveTab }: AuthModa
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
-      // Reset form states on close
       setEmail("");
       setPassword("");
       setName("");
@@ -43,7 +46,14 @@ export function AuthModal({ isOpen, onClose, activeTab, setActiveTab }: AuthModa
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
 
   const validate = (): boolean => {
     const next: Record<string, string> = {};
@@ -73,253 +83,300 @@ export function AuthModal({ isOpen, onClose, activeTab, setActiveTab }: AuthModa
 
     setSubmitting(true);
     setSuccess(false);
-
-    // Mock API request
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
     setSubmitting(false);
     setSuccess(true);
   };
 
+  const inputClass = (hasError: boolean) =>
+    `w-full h-12 bg-[var(--background)] px-4 rounded-xl text-sm font-medium text-slate-900 border transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent-ring)] ${
+      hasError
+        ? "border-rose-300"
+        : "border-[var(--border)] focus:border-[var(--accent)]/40"
+    }`;
+
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Backdrop overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-black/40 backdrop-blur-xs cursor-pointer"
-        />
-
-        {/* Modal card */}
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="relative w-full max-w-[440px] bg-white rounded-[32px] p-8 sm:p-10 shadow-2xl border border-slate-100 flex flex-col z-10"
+      {isOpen ? (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="auth-modal-title"
         >
-          {/* Close button */}
-          <button
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="absolute right-6 top-6 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-            aria-label="Close modal"
+            className="absolute inset-0 cursor-pointer bg-slate-900/50 backdrop-blur-md"
+          />
+
+          <motion.div
+            initial={{ scale: 0.96, opacity: 0, y: 12 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.96, opacity: 0, y: 12 }}
+            transition={{ duration: 0.4, ease: easeOutExpo }}
+            className="relative z-10 flex w-full max-w-[440px] flex-col rounded-[2rem] border border-[var(--border)] bg-white p-8 shadow-[var(--shadow-xl)] sm:p-10"
           >
-            <X className="h-5 w-5" />
-          </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute right-6 top-6 cursor-pointer rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+              aria-label="Close modal"
+            >
+              <X className="h-5 w-5" />
+            </button>
 
-          {/* Logo */}
-          <div className="flex flex-col items-center select-none mt-2">
-            <div className="flex items-center gap-2">
-              <div className="relative h-8 w-8 overflow-hidden">
-                <Image
-                  src={logo}
-                  alt="WedVisa Logo"
-                  className="object-contain"
-                  width={32}
-                  height={32}
-                  priority
-                />
+            <div className="mt-1 flex flex-col items-center select-none">
+              <div className="flex items-center gap-2">
+                <div className="relative h-8 w-8 overflow-hidden">
+                  <Image
+                    src={logo}
+                    alt="WedVisa Logo"
+                    className="object-contain"
+                    width={32}
+                    height={32}
+                    priority
+                  />
+                </div>
+                <span
+                  id="auth-modal-title"
+                  className="text-[22px] font-bold leading-none tracking-tight text-slate-900"
+                >
+                  wed<span className="text-[var(--accent)]">visa</span>
+                </span>
               </div>
-              <span className="text-[22px] font-bold tracking-tight text-[#000000] font-sans leading-none">
-                wed<span className="text-[#e85a23]">visa</span>
-              </span>
+              <p className="mt-3.5 text-[13px] font-medium text-slate-500">
+                {activeTab === "signin" ? "Welcome back" : "Join Wedvisa"}
+              </p>
             </div>
-            <p className="mt-3.5 text-[13px] text-slate-500 font-medium">
-              {activeTab === "signin" ? "Welcome back" : "Join Wedvisa"}
-            </p>
-          </div>
 
-          {/* Tabs Navigation */}
-          <div className="flex border-b border-slate-100 mt-6.5 relative">
-            <button
-              onClick={() => {
-                setActiveTab("signin");
-                setErrors({});
-                setSuccess(false);
-              }}
-              className={`flex-1 text-center pb-3 text-[14.5px] font-bold transition-colors duration-200 cursor-pointer ${
-                activeTab === "signin" ? "text-[#e85a23]" : "text-slate-450 hover:text-slate-800"
-              }`}
-            >
-              Sign in
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("signup");
-                setErrors({});
-                setSuccess(false);
-              }}
-              className={`flex-1 text-center pb-3 text-[14.5px] font-bold transition-colors duration-200 cursor-pointer ${
-                activeTab === "signup" ? "text-[#e85a23]" : "text-slate-450 hover:text-slate-800"
-              }`}
-            >
-              Create account
-            </button>
-            {/* Slide bar */}
-            <div
-              className="absolute bottom-0 h-[2px] bg-[#e85a23] transition-all duration-300 ease-out"
-              style={{
-                width: "50%",
-                left: activeTab === "signin" ? "0%" : "50%",
-              }}
-            />
-          </div>
+            <div className="relative mt-7 flex border-b border-[var(--border)]">
+              {(["signin", "signup"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(tab);
+                    setErrors({});
+                    setSuccess(false);
+                  }}
+                  className={`flex-1 cursor-pointer pb-3 text-center text-[14.5px] font-bold transition-colors duration-300 ${
+                    activeTab === tab
+                      ? "text-[var(--accent)]"
+                      : "text-slate-400 hover:text-slate-800"
+                  }`}
+                >
+                  {tab === "signin" ? "Sign in" : "Create account"}
+                </button>
+              ))}
+              <motion.div
+                className="absolute bottom-0 h-0.5 bg-[var(--accent)]"
+                animate={{ left: activeTab === "signin" ? "0%" : "50%" }}
+                transition={{ duration: 0.35, ease: easeOutExpo }}
+                style={{ width: "50%" }}
+              />
+            </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-5.5" noValidate>
-            {/* Tab 2 Only: YOUR NAME */}
-            {activeTab === "signup" && (
+            <form
+              onSubmit={handleSubmit}
+              className="mt-7 flex flex-col gap-5"
+              noValidate
+            >
+              {activeTab === "signup" && (
+                <div className="flex flex-col items-start text-left">
+                  <label
+                    htmlFor="auth-name"
+                    className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                  >
+                    Your Name
+                  </label>
+                  <input
+                    id="auth-name"
+                    type="text"
+                    placeholder="e.g. Emma Davies"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    autoComplete="name"
+                    className={inputClass(!!errors.name)}
+                  />
+                  {errors.name && (
+                    <span className="mt-1.5 text-[11px] font-medium text-rose-500">
+                      {errors.name}
+                    </span>
+                  )}
+                </div>
+              )}
+
               <div className="flex flex-col items-start text-left">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-                  Your Name
+                <label
+                  htmlFor="auth-email"
+                  className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                >
+                  Email Address
                 </label>
                 <input
-                  type="text"
-                  placeholder="e.g. Emma Davies"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={`w-full h-12 bg-[#faf6f0] px-4 rounded-xl text-sm font-medium text-slate-900 border ${
-                    errors.name ? "border-rose-300 focus:outline-rose-450" : "border-[#dfd2c4]/40 focus:outline-[#e85a23]/60"
-                  }`}
+                  id="auth-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  className={inputClass(!!errors.email)}
                 />
-                {errors.name && (
-                  <span className="text-[11px] text-rose-500 mt-1.5 font-medium">{errors.name}</span>
+                {errors.email && (
+                  <span className="mt-1.5 text-[11px] font-medium text-rose-500">
+                    {errors.email}
+                  </span>
                 )}
               </div>
-            )}
 
-            {/* EMAIL ADDRESS */}
-            <div className="flex flex-col items-start text-left">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full h-12 bg-[#faf6f0] px-4 rounded-xl text-sm font-medium text-slate-900 border ${
-                  errors.email ? "border-rose-300 focus:outline-rose-450" : "border-[#dfd2c4]/40 focus:outline-[#e85a23]/60"
-                }`}
-              />
-              {errors.email && (
-                <span className="text-[11px] text-rose-500 mt-1.5 font-medium">{errors.email}</span>
-              )}
-            </div>
-
-            {/* PASSWORD / CREATE PASSWORD */}
-            <div className="flex flex-col items-start text-left">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-                {activeTab === "signin" ? "Password" : "Create Password"}
-              </label>
-              <div className="relative w-full">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder={activeTab === "signin" ? "Enter your password" : "At least 8 characters"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`w-full h-12 bg-[#faf6f0] pl-4 pr-12 rounded-xl text-sm font-medium text-slate-900 border ${
-                    errors.password ? "border-rose-300 focus:outline-rose-450" : "border-[#dfd2c4]/40 focus:outline-[#e85a23]/60"
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-                  tabIndex={-1}
+              <div className="flex flex-col items-start text-left">
+                <label
+                  htmlFor="auth-password"
+                  className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500"
                 >
-                  {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
-                </button>
-              </div>
-              {errors.password && (
-                <span className="text-[11px] text-rose-500 mt-1.5 font-medium">{errors.password}</span>
-              )}
-            </div>
-
-            {/* Forgot Password Link (Sign in only) */}
-            {activeTab === "signin" && (
-              <div className="flex justify-end -mt-2">
-                <button
-                  type="button"
-                  className="text-[12.5px] font-semibold text-[#e85a23] hover:text-[#d04b19] transition-colors cursor-pointer"
-                >
-                  Forgot password?
-                </button>
-              </div>
-            )}
-
-            {/* Submit button */}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full h-[52px] bg-[#d04b19] text-white hover:bg-[#b83f12] disabled:bg-slate-350 transition-colors rounded-xl font-bold text-[14.5px] shadow-sm shadow-[#d04b19]/15 flex items-center justify-center gap-2 cursor-pointer mt-1"
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="h-4.5 w-4.5 animate-spin" />
-                  <span>{activeTab === "signin" ? "Signing in..." : "Creating account..."}</span>
-                </>
-              ) : (
-                <span>{activeTab === "signin" ? "Sign in" : "Create account"}</span>
-              )}
-            </button>
-
-            {/* Success state demo feedback */}
-            {success && (
-              <div className="text-[12px] bg-emerald-50 text-emerald-700 rounded-xl p-3 text-center border border-emerald-100 font-medium">
-                {activeTab === "signin" ? "Logged in successfully (Demo)!" : "Account created successfully (Demo)!"}
-              </div>
-            )}
-
-            {/* Disclaimer (Register only) */}
-            {activeTab === "signup" && (
-              <p className="text-[10px] text-slate-400 font-medium leading-relaxed text-center px-4">
-                By creating an account you agree to our{" "}
-                <a href="#terms" className="underline hover:text-slate-600 transition-colors">Terms</a> and{" "}
-                <a href="#privacy" className="underline hover:text-slate-600 transition-colors">Privacy Policy</a>
-              </p>
-            )}
-
-            {/* Bottom Swapper Link */}
-            <div className="text-center mt-1 border-t border-slate-100 pt-5">
-              {activeTab === "signin" ? (
-                <p className="text-[12.5px] font-medium text-slate-500">
-                  Don&apos;t have an account?{" "}
+                  {activeTab === "signin" ? "Password" : "Create Password"}
+                </label>
+                <div className="relative w-full">
+                  <input
+                    id="auth-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder={
+                      activeTab === "signin"
+                        ? "Enter your password"
+                        : "At least 8 characters"
+                    }
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete={
+                      activeTab === "signin" ? "current-password" : "new-password"
+                    }
+                    className={`${inputClass(!!errors.password)} pr-12`}
+                  />
                   <button
                     type="button"
-                    onClick={() => {
-                      setActiveTab("signup");
-                      setErrors({});
-                      setSuccess(false);
-                    }}
-                    className="font-bold text-[#e85a23] hover:text-[#d04b19] transition-colors cursor-pointer"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:text-slate-600"
+                    tabIndex={-1}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    Create one free
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
-                </p>
-              ) : (
-                <p className="text-[12.5px] font-medium text-slate-500">
-                  Already have an account?{" "}
+                </div>
+                {errors.password && (
+                  <span className="mt-1.5 text-[11px] font-medium text-rose-500">
+                    {errors.password}
+                  </span>
+                )}
+              </div>
+
+              {activeTab === "signin" && (
+                <div className="-mt-1 flex justify-end">
                   <button
                     type="button"
-                    onClick={() => {
-                      setActiveTab("signin");
-                      setErrors({});
-                      setSuccess(false);
-                    }}
-                    className="font-bold text-[#e85a23] hover:text-[#d04b19] transition-colors cursor-pointer"
+                    className="cursor-pointer text-[12.5px] font-semibold text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
                   >
-                    Sign in
+                    Forgot password?
                   </button>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="light-sweep mt-1 flex h-[52px] cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--accent)] text-[14.5px] font-bold text-white shadow-[var(--shadow-accent)] transition-colors hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>
+                      {activeTab === "signin"
+                        ? "Signing in..."
+                        : "Creating account..."}
+                    </span>
+                  </>
+                ) : (
+                  <span>
+                    {activeTab === "signin" ? "Sign in" : "Create account"}
+                  </span>
+                )}
+              </button>
+
+              {success && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-emerald-100 bg-emerald-50 p-3 text-center text-[12px] font-medium text-emerald-700"
+                >
+                  {activeTab === "signin"
+                    ? "Logged in successfully (Demo)!"
+                    : "Account created successfully (Demo)!"}
+                </motion.div>
+              )}
+
+              {activeTab === "signup" && (
+                <p className="px-4 text-center text-[10px] font-medium leading-relaxed text-slate-400">
+                  By creating an account you agree to our{" "}
+                  <a
+                    href="#terms"
+                    className="underline transition-colors hover:text-slate-600"
+                  >
+                    Terms
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="#privacy"
+                    className="underline transition-colors hover:text-slate-600"
+                  >
+                    Privacy Policy
+                  </a>
                 </p>
               )}
-            </div>
-          </form>
-        </motion.div>
-      </div>
+
+              <div className="mt-1 border-t border-[var(--border)] pt-5 text-center">
+                {activeTab === "signin" ? (
+                  <p className="text-[12.5px] font-medium text-slate-500">
+                    Don&apos;t have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab("signup");
+                        setErrors({});
+                        setSuccess(false);
+                      }}
+                      className="cursor-pointer font-bold text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+                    >
+                      Create one free
+                    </button>
+                  </p>
+                ) : (
+                  <p className="text-[12.5px] font-medium text-slate-500">
+                    Already have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab("signin");
+                        setErrors({});
+                        setSuccess(false);
+                      }}
+                      className="cursor-pointer font-bold text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+                    >
+                      Sign in
+                    </button>
+                  </p>
+                )}
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      ) : null}
     </AnimatePresence>
   );
 }

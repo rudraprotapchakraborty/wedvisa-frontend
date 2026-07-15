@@ -1,30 +1,34 @@
+"use client";
+
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] select-none",
   {
     variants: {
       variant: {
         default:
-          "bg-violet-600 text-white shadow-lg shadow-violet-600/25 hover:bg-violet-500 hover:shadow-violet-500/30 hover:scale-[1.02]",
+          "bg-[var(--accent)] text-white shadow-[var(--shadow-accent)] hover:bg-[var(--accent-hover)] hover:shadow-[0_16px_40px_-10px_rgba(196,83,29,0.4)] hover:-translate-y-px",
         secondary:
-          "bg-white text-slate-900 shadow-md shadow-slate-900/5 hover:bg-slate-50 hover:scale-[1.02]",
+          "bg-white text-slate-900 shadow-[var(--shadow-md)] border border-[var(--border)] hover:border-[var(--border-strong)] hover:shadow-[var(--shadow-lg)] hover:-translate-y-px",
         outline:
-          "border border-white/40 bg-transparent text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/60",
+          "border border-white/30 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/50",
         outlineDark:
-          "border border-slate-200 bg-white text-slate-900 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700",
-        ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+          "border border-[var(--border-strong)] bg-transparent text-slate-900 hover:bg-white hover:border-slate-300 hover:shadow-[var(--shadow-sm)]",
+        ghost:
+          "text-slate-700 hover:bg-slate-900/[0.04] hover:text-slate-900",
+        dark: "bg-slate-900 text-[var(--foreground-on-dark)] shadow-[var(--shadow-lg)] hover:bg-slate-800 hover:-translate-y-px",
         gradient:
-          "bg-violet-600 text-white shadow-lg shadow-violet-600/25 hover:bg-violet-700 hover:scale-[1.02]",
+          "bg-[var(--accent)] text-white shadow-[var(--shadow-accent)] hover:bg-[var(--accent-hover)] hover:-translate-y-px",
       },
       size: {
         default: "h-11 px-6 py-2",
         sm: "h-9 px-4 text-xs",
-        lg: "h-14 px-8 text-base",
-        xl: "h-16 px-10 text-lg",
+        lg: "h-12 px-7 text-[0.9375rem]",
+        xl: "h-14 px-9 text-base",
         icon: "h-10 w-10",
       },
     },

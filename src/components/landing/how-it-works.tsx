@@ -1,145 +1,216 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import {
   CalendarRange,
   ClipboardList,
   Store,
-  Image,
+  Image as ImageIcon,
 } from "lucide-react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   AnimatedSection,
   FadeIn,
-  StaggerItem,
+  Ornament,
 } from "@/components/landing/animated-section";
 
 const steps = [
   {
     step: "01",
     title: "Create your event",
-    description: "Set your date, budget and guest count. Your personal planner is ready instantly.",
+    description:
+      "Set your date, budget and guest count. Your personal planner is ready instantly.",
     icon: CalendarRange,
   },
   {
     step: "02",
     title: "Plan in one place",
-    description: "Budget, checklist, guest list, timeline and seating – all connected, always in sync.",
+    description:
+      "Budget, checklist, guest list, timeline and seating – all connected, always in sync.",
     icon: ClipboardList,
   },
   {
     step: "03",
     title: "Find your suppliers",
-    description: "Browse UK photographers, venues, caterers and florists and enquire directly.",
+    description:
+      "Browse UK photographers, venues, caterers and florists and enquire directly.",
     icon: Store,
   },
   {
     step: "04",
     title: "Celebrate & remember",
-    description: "A private gallery your guests can add to – then plan the next milestone too.",
-    icon: Image,
+    description:
+      "A private gallery your guests can add to – then plan the next milestone too.",
+    icon: ImageIcon,
   },
 ];
 
 export function HowItWorks() {
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const root = cardsRef.current;
+    if (!root) return;
+
+    const cards = root.querySelectorAll<HTMLElement>("[data-step-card]");
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cards,
+        { y: 60, opacity: 0, rotateX: 8 },
+        {
+          y: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 1,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: root,
+            start: "top 78%",
+            once: true,
+          },
+        }
+      );
+
+      // Connecting line draw
+      const line = root.querySelector<HTMLElement>("[data-path-line]");
+      if (line) {
+        gsap.fromTo(
+          line,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 1.4,
+            ease: "power2.inOut",
+            scrollTrigger: {
+              trigger: root,
+              start: "top 70%",
+              once: true,
+            },
+          }
+        );
+      }
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative w-full bg-[#faf6f0] overflow-hidden">
-      {/* Background floral decoration matching the left edge */}
-      <div 
-        className="absolute top-0 bottom-0 left-0 w-[20%] pointer-events-none opacity-20 select-none bg-contain bg-left bg-no-repeat"
-        style={{ backgroundImage: "url('/watercolor-floral-bg.jpg')" }}
-      />
+    <div className="relative w-full overflow-hidden bg-[var(--background)]">
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/4 opacity-[0.12]"
+        aria-hidden
+      >
+        <div
+          className="h-full w-full bg-cover bg-left bg-no-repeat"
+          style={{ backgroundImage: "url('/watercolor-floral-bg.jpg')" }}
+        />
+      </div>
 
       <AnimatedSection
         id="how-it-works"
-        className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32 lg:px-8 z-10"
+        className="relative z-10 mx-auto max-w-[var(--max-width)] px-4 py-[var(--section-y)] sm:px-6 lg:px-8"
       >
-        {/* Top Section: Header & Image */}
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
-          {/* Left Column: Heading & Text */}
-          <div className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left">
-            {/* Eyebrow: HOW IT WORKS */}
-            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#d04b19]">
-              How It Works
-            </p>
-
-            {/* Separator Line with Heart */}
-            <div className="flex items-center w-full max-w-[140px] my-3.5 gap-3">
-              <div className="h-[1px] bg-[#dfd2c4] flex-grow" />
-              <span className="text-[#e85a23] text-xs leading-none">♡</span>
-              <div className="h-[1px] bg-[#dfd2c4] flex-grow" />
-            </div>
-
-            {/* Main Title */}
-            <h2 className="mt-2 font-serif text-4xl sm:text-5xl lg:text-[46px] lg:leading-[1.15] font-medium text-[#1c1613]">
-              From &ldquo;yes&rdquo; to &ldquo;I do&rdquo;, <br className="hidden sm:inline" />
-              <span className="text-[#e85a23] italic font-serif">perfectly organised.</span>
-            </h2>
-
-            {/* Subtext */}
-            <p className="mt-6 text-sm sm:text-base leading-relaxed text-slate-600 font-normal max-w-md">
-              One free account holds every part of your wedding &mdash; <br className="hidden md:inline" />
-              and any celebration that comes after it.
-            </p>
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="flex flex-col items-center text-center lg:col-span-6 lg:items-start lg:text-left">
+            <FadeIn>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--accent)]">
+                How It Works
+              </p>
+            </FadeIn>
+            <FadeIn delay={0.05}>
+              <Ornament className="my-4 max-w-[8rem]" />
+            </FadeIn>
+            <FadeIn delay={0.08} blur>
+              <h2 className="font-serif text-4xl font-medium leading-[1.12] tracking-tight text-slate-900 sm:text-5xl lg:text-[2.85rem]">
+                From &ldquo;yes&rdquo; to &ldquo;I do&rdquo;,
+                <br className="hidden sm:block" />
+                <em className="not-italic font-serif italic text-[var(--accent)]">
+                  perfectly organised.
+                </em>
+              </h2>
+            </FadeIn>
+            <FadeIn delay={0.14}>
+              <p className="mt-6 max-w-md text-base leading-relaxed text-slate-600">
+                One free account holds every part of your wedding — and any
+                celebration that comes after it.
+              </p>
+            </FadeIn>
           </div>
 
-          {/* Right Column: Image */}
-          <div className="lg:col-span-6 flex justify-center">
-            <FadeIn direction="right" className="relative w-full max-w-[500px] aspect-[4/3] rounded-[24px] overflow-hidden shadow-md shadow-slate-900/5 border border-[#dfd2c4]/55 bg-[#f6efe7]">
-              <img
-                src="/wedding-planning-couple.jpg"
-                alt="Couple planning wedding together"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+          <div className="lg:col-span-6">
+            <FadeIn direction="right" className="relative perspective-[1200px]">
+              <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--background-muted)] shadow-[var(--shadow-lg)]">
+                <Image
+                  src="/wedding-planning-couple.jpg"
+                  alt="Couple planning wedding together"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent" />
+                {/* Light sweep on hover */}
+                <div className="pointer-events-none absolute inset-0 translate-x-[-120%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-[120%]" />
+              </div>
+              <div
+                className="absolute -bottom-3 -right-3 -z-10 hidden h-full w-full rounded-[1.75rem] border border-[var(--border)] bg-[var(--background-muted)] md:block"
+                aria-hidden
               />
             </FadeIn>
           </div>
         </div>
 
-        {/* Middle Section: Cards Flow */}
-        <div className="mt-20 lg:mt-24 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6 max-w-6xl mx-auto">
-          {steps.map((step, idx) => {
-            const IconComponent = step.icon;
-            return (
-              <div key={step.step} className="relative h-full">
-                <StaggerItem className="h-full">
-                  <div className="relative flex flex-col items-center bg-white rounded-[24px] border border-[#f2eae1] p-6 pt-10 text-center shadow-[0_4px_16px_-4px_rgba(28,22,19,0.02)] h-full">
-                    {/* Floating number badge */}
-                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white border border-[#f2eae1] text-xs font-semibold text-[#d04b19] shadow-xs">
+        <div
+          ref={cardsRef}
+          className="relative mx-auto mt-20 max-w-6xl lg:mt-28"
+          style={{ perspective: "1200px" }}
+        >
+          {/* Path line behind cards */}
+          <div
+            data-path-line
+            className="pointer-events-none absolute left-[8%] right-[8%] top-[3.25rem] hidden h-px origin-left bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent lg:block"
+            aria-hidden
+          />
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            {steps.map((step) => {
+              const Icon = step.icon;
+              return (
+                <div
+                  key={step.step}
+                  data-step-card
+                  className="relative h-full opacity-0"
+                  style={{ transformStyle: "preserve-3d" }}
+                >
+                  <div className="group relative flex h-full flex-col items-center rounded-[1.5rem] border border-[var(--border)] bg-white px-6 pb-8 pt-10 text-center shadow-[var(--shadow-sm)] transition-all duration-500 hover:-translate-y-2 hover:border-[var(--border-strong)] hover:shadow-[var(--shadow-lg)]">
+                    <div className="absolute -top-4 left-1/2 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border border-[var(--border)] bg-white text-[11px] font-bold tracking-wide text-[var(--accent)] shadow-[var(--shadow-sm)]">
                       {step.step}
                     </div>
-
-                    {/* Icon container */}
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#f2eae1] text-[#e85a23] bg-[#faf6f0]/50">
-                      <IconComponent className="h-5 w-5 stroke-[1.75]" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background-muted)]/50 text-[var(--accent)] transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--accent-soft)] group-hover:shadow-[0_0_24px_var(--accent-glow)]">
+                      <Icon className="h-5 w-5" strokeWidth={1.75} />
                     </div>
-
-                    {/* Title */}
-                    <h3 className="mt-4 font-serif text-[17px] font-semibold text-[#1c1613]">
+                    <h3 className="mt-5 font-serif text-[1.05rem] font-semibold text-slate-900">
                       {step.title}
                     </h3>
-
-                    {/* Description */}
-                    <p className="mt-2.5 text-[12.5px] leading-relaxed text-slate-500 font-normal">
+                    <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-slate-500">
                       {step.description}
                     </p>
                   </div>
-                </StaggerItem>
-
-                {/* Connecting Line and Dot between steps */}
-                {idx < 3 && (
-                  <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-4 w-8 items-center justify-center z-20 pointer-events-none">
-                    <div className="w-8 h-[1px] bg-[#f2eae1]" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#e85a23] absolute" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Bottom Section: Cursive Slogan */}
-        <FadeIn delay={0.2} className="mt-16 sm:mt-20 text-center">
-          <p className="font-script text-[32px] sm:text-[38px] text-[#e85a23] tracking-wide leading-none">
-            Organise everything. Enjoy every moment. ♡
+        <FadeIn delay={0.2} className="mt-16 text-center sm:mt-20">
+          <p className="font-script text-[2rem] leading-none tracking-wide text-[var(--accent)] sm:text-[2.35rem]">
+            Organise everything. Enjoy every moment.
           </p>
         </FadeIn>
       </AnimatedSection>
