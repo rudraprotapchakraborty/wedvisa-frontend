@@ -11,6 +11,7 @@ export { WhyWedvisa } from "./why-wedvisa";
 export { SupplierCta } from "./supplier-cta";
 export { Inspiration } from "./inspiration";
 export { FinalCta } from "./final-cta";
+export { Scrapbook } from "./scrapbook";
 export { Features } from "./features";
 export { Countries } from "./countries";
 export { Testimonials } from "./testimonials";

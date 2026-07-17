@@ -28,6 +28,10 @@ const WhyWedvisa = dynamic(
   () => import("@/components/landing/why-wedvisa").then((m) => m.WhyWedvisa),
   { ssr: true }
 );
+const Scrapbook = dynamic(
+  () => import("@/components/landing/scrapbook").then((m) => m.Scrapbook),
+  { ssr: true }
+);
 const SupplierCta = dynamic(
   () => import("@/components/landing/supplier-cta").then((m) => m.SupplierCta),
   { ssr: true }
@@ -62,6 +66,9 @@ export default function HomePage() {
         </div>
         <div className="perf-section">
           <WhyWedvisa />
+        </div>
+        <div className="perf-section">
+          <Scrapbook />
         </div>
         <div className="perf-section">
           <SupplierCta />

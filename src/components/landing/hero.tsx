@@ -212,67 +212,57 @@ export function Hero() {
             <div className="relative hidden min-h-[420px] items-center justify-center lg:col-span-6 lg:flex xl:col-span-7">
               <motion.div
                 style={{ y: polaroidA, rotate: polaroidRotA }}
-                className="absolute left-[2%] top-[6%] z-10 w-[7.5rem] bg-white p-1.5 pb-4 shadow-[var(--shadow-lg)] ring-1 ring-black/[0.04]"
+                className="absolute left-[2%] top-[6%] z-10 w-[8rem] select-none hover:z-30 transition-all duration-300"
                 aria-hidden
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src="/1.png"
-                    alt=""
-                    fill
-                    sizes="120px"
-                    quality={65}
-                    className="object-cover"
-                  />
-                </div>
+                <Image
+                  src="/Polaroid 1 .png"
+                  alt="Wedding"
+                  width={160}
+                  height={200}
+                  priority
+                  className="w-full h-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:scale-105"
+                />
               </motion.div>
               <motion.div
                 style={{ y: polaroidB, rotate: polaroidRotB }}
-                className="absolute right-[4%] top-[2%] z-10 w-[7rem] bg-white p-1.5 pb-4 shadow-[var(--shadow-lg)] ring-1 ring-black/[0.04]"
+                className="absolute right-[4%] top-[2%] z-10 w-[7.5rem] select-none hover:z-30 transition-all duration-300"
                 aria-hidden
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src="/2.png"
-                    alt=""
-                    fill
-                    sizes="120px"
-                    quality={65}
-                    className="object-cover"
-                  />
-                </div>
+                <Image
+                  src="/Polaroid 8.png"
+                  alt="Venue"
+                  width={150}
+                  height={188}
+                  priority
+                  className="w-full h-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:scale-105"
+                />
               </motion.div>
               <motion.div
                 style={{ y: polaroidC, rotate: polaroidRotC }}
-                className="absolute bottom-[12%] left-[4%] z-10 w-[7rem] bg-white p-1.5 pb-4 shadow-[var(--shadow-lg)] ring-1 ring-black/[0.04]"
+                className="absolute bottom-[12%] left-[4%] z-10 w-[7.5rem] select-none hover:z-30 transition-all duration-300"
                 aria-hidden
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src="/3.png"
-                    alt=""
-                    fill
-                    sizes="120px"
-                    quality={65}
-                    className="object-cover"
-                  />
-                </div>
+                <Image
+                  src="/Polaroid 6.png"
+                  alt="Photographer"
+                  width={150}
+                  height={188}
+                  className="w-full h-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:scale-105"
+                />
               </motion.div>
               <motion.div
                 style={{ y: polaroidD, rotate: polaroidRotD }}
-                className="absolute bottom-[10%] right-[6%] z-10 w-[6.5rem] bg-white p-1.5 pb-4 shadow-[var(--shadow-lg)] ring-1 ring-black/[0.04]"
+                className="absolute bottom-[10%] right-[6%] z-10 w-[7rem] select-none hover:z-30 transition-all duration-300"
                 aria-hidden
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src="/4.png"
-                    alt=""
-                    fill
-                    sizes="110px"
-                    quality={65}
-                    className="object-cover"
-                  />
-                </div>
+                <Image
+                  src="/Polaroid 4.png"
+                  alt="Love"
+                  width={140}
+                  height={175}
+                  className="w-full h-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:scale-105"
+                />
               </motion.div>
 
               <motion.div
